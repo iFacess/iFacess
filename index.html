@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iFacess - Acessibilidade plena para todos</title>
+    <style>
+        /* Reset e estilos gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7f9;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        
+        /* Cabeçalho e navegação - MODIFICADO (FIXO) */
+        header {
+            background: linear-gradient(135deg, #2c3e50, #4a6491);
+            color: white;
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: padding 0.3s ease;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: white;
+            text-decoration: none;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 25px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Hero Section - MODIFICADO (MENOR) */
+        .hero {
+            background: linear-gradient(rgba(44, 62, 80, 0.8), rgba(44, 62, 80, 0.8)), url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect width="100" height="100" fill="%234a6491"/><path d="M0 0L100 100" stroke="%232c3e50" stroke-width="2"/><path d="M100 0L0 100" stroke="%232c3e50" stroke-width="2"/></svg>');
+            background-size: cover;
+            background-attachment: fixed;
+            color: white;
+            text-align: center;
+             /* Reduzido o padding inferior */
+            height: 130vh; /* Altura reduzida para 60% da viewport */
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+        
+        .hero-content {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            translate: 0 -200px;
+        }
+        
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #ff6b6b;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .btn:hover {
+            background-color: #ff5252;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* Ponto de ancoragem para o conteúdo */
+        .content-start {
+            position: absolute;
+            bottom: 60px; /* Ajustado para a nova altura do hero */
+            left: 0;
+            width: 100%;
+            height: 1px;
+        }
+        
+        /* Conteúdo principal - MODIFICADO */
+        .main-content {
+            position: relative;
+            z-index: 50;
+            background: #f5f7f9;
+            margin-top: -60vh; /* Compensação para a altura reduzida do hero */
+        }
+        
+        /* Seções de conteúdo */
+        .section {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #2c3e50;
+            position: relative;
+        }
+        
+        .section-title:after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: #4a6491;
+            margin: 15px auto;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        .feature-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+        
+        /* Formulário */
+        .form-section {
+            background-color: white;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: #4a6491;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(74, 100, 145, 0.2);
+        }
+        
+        /* Rodapé */
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .footer-logo {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .footer-links a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-links a:hover {
+            color: #ff6b6b;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .hero {
+                padding: 100px 0 40px;
+                min-height: 50vh;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-section {
+                padding: 20px;
+            }
+            
+            .main-content {
+                margin-top: -50vh;
+            }
+        }
+
+        /* Pequenas animações para melhor experiência */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .feature-card {
+            animation: fadeInUp 0.8s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .feature-card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .feature-card:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        .feature-card:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho Fixo -->
+    <header>
+        <div class="container header-content">
+            <a href="#" class="logo">iFacess</a>
+            <nav>
+                <ul>
+                    <li><a href="#">Inicio</a></li>
+                    <li><a href="#">Sobre</a></li>
+                    <li><a href="#">Projetos</a></li>
+                    <li><a href="#">Parceiros</a></li>
+                    <li><a href="#">Fórum</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section (menor) -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>iFor1 - O fórum para tornar seu mundo mais acessível</h1>
+            <p>Conectamos pessoas para resolver questões de acessibilidade de maneira colaborativa e transparente.</p>
+            <a href="#" class="btn">Participar agora!</a>
+        </div>
+        
+        <!-- Ponto onde o conteúdo principal começará -->
+        <div class="content-start"></div>
+    </section>
+
+    <!-- Conteúdo Principal (agora mais visível) -->
+    <div class="main-content">
+        <!-- Seção de Recursos -->
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">Como funciona o iFacess</h2>
+                <div class="features">
+                    <div class="feature-card">
+                        <h3>Ensino</h3>
+                        <p>Oferecemos recursos educacionais para capacitar pessoas e organizações sobre acessibilidade. Nossa plataforma inclui cursos, tutoriais e materiais de referência para promover a inclusão digital e física em todos os ambientes.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Colaboração</h3>
+                        <p>Conectamos especialistas em acessibilidade com pessoas que precisam de soluções. Através do nosso fórum, usuários podem compartilhar experiências, fazer perguntas e colaborar no desenvolvimento de soluções inclusivas.</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Viabilização</h3>
+                        <p>Facilitamos a implementação de soluções de acessibilidade através de parcerias com empresas, órgãos governamentais e instituições. Ajudamos a transformar ideias em projetos concretos que tornam o mundo mais acessível.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção de Formulário -->
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">Entre em Contato</h2>
+                <div class="form-section">
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Nome</label>
+                            <input type="text" id="name" placeholder="Seu nome completo">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-mail</label>
+                            <input type="email" id="email" placeholder="Seu melhor e-mail">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Mensagem</label>
+                            <textarea id="message" rows="5" placeholder="Como podemos ajudar?"></textarea>
+                        </div>
+                        <button type="submit" class="btn">Enviar Mensagem</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rodapé -->
+        <footer>
+            <div class="container footer-content">
+                <div class="footer-logo">iFacess</div>
+                <div class="footer-links">
+                    <a href="#">Inicio</a>
+                    <a href="#">Sobre</a>
+                    <a href="#">Projetos</a>
+                    <a href="#">Parceiros</a>
+                    <a href="#">Fórum</a>
+                </div>
+                <p>&copy;2025 iFacess - Todos os direitos reservados</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Pequeno script para melhorar a experiência de scroll
+        document.addEventListener('DOMContentLoaded', function() {
+            const header = document.querySelector('header');
+            const heroSection = document.querySelector('.hero');
+            
+            // Ajustar o padding do hero para compensar a altura do header fixo
+            function adjustHeroPadding() {
+                const headerHeight = header.offsetHeight;
+                heroSection.style.paddingTop = (headerHeight + 40) + 'px';
+            }
+            
+            // Executar no carregamento e no redimensionamento da janela
+            adjustHeroPadding();
+            window.addEventListener('resize', adjustHeroPadding);
+            
+            // Adicionar efeito de redução do header no scroll
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    header.style.padding = '10px 0';
+                    header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.2)';
+                } else {
+                    header.style.padding = '15px 0';
+                    header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
