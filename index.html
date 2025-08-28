@@ -6,92 +6,10 @@
     <title>iFacess - Acessibilidade plena para todos</title>
     <link rel="stylesheet" href="./public/css/header.css">
     <link rel="stylesheet" href="./public/css/hero.css">
+    <link rel="stylesheet" href="./public/css/style.css">
+    <link rel="stylesheet" href="./public/css/sections.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Alice&family=Bebas+Neue&family=Ribeye+Marrow&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
-        /* Reset e estilos gerais */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        html{
-            scroll-behavior: smooth;
-        }
-        body{
-            background-color: #E4E4E4;
-            color: #0A0A0A;
-            line-height: 1.6;
-            font-family: 'Rubik', serif;
-        }
-        
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-        .main-content {
-            position: relative;
-            z-index: 50;
-            background: #e4e4e4;
-            margin-top: -60vh; /* Compensação para a altura reduzida do hero */
-        }
-        
-        /* Seções de conteúdo */
-        .section {
-            padding: 60px 0;
-        }
-        
-        .section-title {
-            font-size: 38px;
-            font-family: 'Alice', serif;
-            font-weight: 500;
-            text-align: center;
-            margin-bottom: 40px;
-            color: #45568E;
-            position: relative;
-        }
-        
-        .section-title:after {
-            content: '';
-            display: block;
-            width: 60px;    
-            height: 4px;
-            background: #4a6491;
-            margin: 15px auto;
-        }
-        
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-        
-        .feature-card {
-            font-family: 'Rubik', serif;
-            font-weight: 400;
-            font-size: 15px;
-            text-align: justify;
-            background: white;
-            border-radius: 8px;
-            padding: 25px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s;
-        }
-        
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        }
-        
-        .feature-card h3 {
-            font-family: 'Alice', serif;
-            font-weight:500;
-            color: #45568E;
-            margin-bottom: 15px;    
-            font-size: 1.5rem;
-        }
         
         /* Rodapé */
         footer {
@@ -134,78 +52,6 @@
         .footer-links a:hover {
             color: #ff6b6b;
         }
-        
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            nav ul {
-                margin-top: 15px;
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            nav ul li {
-                margin: 5px 10px;
-            }
-            
-            .hero {
-                padding: 100px 0 40px;
-                min-height: 50vh;
-            }
-            
-            .hero h1 {
-                font-size: 2rem;
-            }
-            
-            .features {
-                grid-template-columns: 1fr;
-            }
-            
-            .form-section {
-                padding: 20px;
-            }
-            
-            .main-content {
-                margin-top: -50vh;
-            }
-        }
-
-        /* Pequenas animações para melhor experiência */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero-content {
-            animation: fadeInUp 0.8s ease-out;
-        }
-
-        .feature-card {
-            animation: fadeInUp 0.8s ease-out;
-            animation-fill-mode: both;
-        }
-
-        .feature-card:nth-child(1) {
-            animation-delay: 0.2s;
-        }
-
-        .feature-card:nth-child(2) {
-            animation-delay: 0.4s;
-        }
-
-        .feature-card:nth-child(3) {
-            animation-delay: 0.6s;
-        }
     </style>
 </head>
 <body>
@@ -219,7 +65,7 @@
         <div class="hero-content">
             <h1>iFor1 <span>- O fórum para tornar seu mundo mais acessível</span></h1>
             <p>Conectamos pessoas para resolver questões de acessibilidade de maneira colaborativa e transparente.</p>
-            <a href="#" class="btn">Participar agora!</a>
+            <a href="/public/html/forum/ifor1.html" class="btn">Participar agora!</a>
         </div>
     </section>
 
@@ -239,7 +85,6 @@
         </section>
 
         <!-- Funcionamento Cards -->
-
         <section class="section">
             <div class="container">
                 <h2 class="section-title">Como funciona o iFacess</h2>
@@ -308,7 +153,7 @@
             </div>
         </footer>
     </div>
-    <script src="./src/js/header.js"></script>
+    <script src="/src/js/header.js"></script>
     <script>        // Pequeno script para melhorar a experiência de scroll
         document.addEventListener('DOMContentLoaded', function() {
             const header = document.querySelector('header');
