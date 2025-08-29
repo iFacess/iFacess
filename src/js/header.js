@@ -1,24 +1,27 @@
 function loadHeader() {
-    // Detecta a página atual
-    const currentPage = window.location.pathname.split("/").pop(); // Ex: "index.html" ou "ifbraille.html"
+    // Pega o caminho da URL
+    const path = window.location.pathname;
 
     // Define os links do menu padrão (index.html)
     let menuItems = `
         <a href="index.html" class="logo">iFacess</a>
-            <nav>
-                <ul>
-                    <li><a href="#">Inicio</a></li>
-                    <li><a href="#">Sobre</a></li>
-                    <li><a href="#anchor_projects">Projetos</a></li>
-                    <li><a href="#">Parceiros</a></li>
-                    <li><a href="/public/html/forum/ifor1.html">Fórum</a></li>
-                </ul>
-            </nav>
+        <nav>
+            <ul>
+                <li><a href="#">Inicio</a></li>
+                <li><a href="#">Sobre</a></li>
+                <li><a href="#anchor_projects">Projetos</a></li>
+                <li><a href="#">Parceiros</a></li>
+                <li><a href="/public/html/forum/ifor1.html">Fórum</a></li>
+            </ul>
+        </nav>
     `;
-    // Se estiver na página ifbraille.html, troca os itens
-    if (currentPage === "ifbraille.html") {
+
+    // Se estiver na página/pasta ifbraille
+    if (path.includes("ifbraille.html") || path.endsWith("/ifbraille/")) {
         menuItems = `
-            <a href="../../../public/html/ifbraille/ifbraille.html" class="logo"><img src='../../../src/img/ifbraille/ifbraille_white.png' style="width: 120px; margin-top:0.2rem"></a>
+            <a href="../../../public/html/ifbraille/ifbraille.html" class="logo">
+                <img src='../../../src/img/ifbraille/ifbraille_white.png' style="width: 120px; margin-top:0.2rem">
+            </a>
             <nav>
                 <ul>
                     <li><a href="#">Início</a></li>
@@ -30,10 +33,11 @@ function loadHeader() {
             </nav>
         `;
     }
-    // Se estiver na página ifor1.html, troca os itens
-    if (currentPage === "ifor1.html") {
+
+    // Se estiver na página/pasta ifor1
+    if (path.includes("ifor1.html") || path.endsWith("/forum/")) {
         menuItems = `
-        <a href="../../../public/html/forum/ifor1.html" class="logo">iFor1</a>
+            <a href="../../../public/html/forum/ifor1.html" class="logo">iFor1</a>
             <nav>
                 <ul>
                     <li><a href="../../../index.html">Inicio</a></li>
@@ -85,17 +89,19 @@ function loadHeader() {
 document.addEventListener("DOMContentLoaded", loadHeader);
 
 
+// Ajuste do hero em relação ao header fixo
 document.addEventListener('DOMContentLoaded', function() {
     const header = document.querySelector('header');
     const heroSection = document.querySelector('.hero');
     
+    if (!header || !heroSection) return;
+
     // Ajustar o padding do hero para compensar a altura do header fixo
     function adjustHeroPadding() {
         const headerHeight = header.offsetHeight;
         heroSection.style.paddingTop = (headerHeight + 40) + 'px';
     }
     
-    // Executar no carregamento e no redimensionamento da janela
     adjustHeroPadding();
     window.addEventListener('resize', adjustHeroPadding);
     
