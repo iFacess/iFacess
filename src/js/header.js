@@ -19,9 +19,7 @@ function loadHeader() {
     // Se estiver na página/pasta ifbraille
     if (path.includes("ifbraille.html") || path.endsWith("/ifbraille/")) {
         menuItems = `
-            <a href="../../../public/html/ifbraille/ifbraille.html" class="logo">
-                <img src='../../../src/img/ifbraille/ifbraille_white.png' style="width: 120px; margin-top:0.2rem">
-            </a>
+            <img src='../../../src/img/ifbraille/ifbraille_white.png' style="width: 110px;">
             <nav>
                 <ul>
                     <li><a href="#">Início</a></li>
