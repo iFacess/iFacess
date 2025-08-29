@@ -17,7 +17,7 @@ function loadHeader() {
     `;
 
     // Se estiver na página/pasta ifbraille
-    if (path.includes("ifbraille.html") || path.endsWith("/ifbraille/")) {
+    if (path.includes("ifbraille.html") || path.includes("/ifbraille/")) {
         menuItems = `
             <img src='../../../src/img/ifbraille/ifbraille_white.png' style="width: 110px;">
             <nav>
@@ -33,7 +33,7 @@ function loadHeader() {
     }
 
     // Se estiver na página/pasta ifor1
-    if (path.includes("ifor1.html") || path.endsWith("/forum/")) {
+    if (path.includes("ifor1.html") || path.includes("/forum/")) {
         menuItems = `
             <a href="../../../public/html/forum/ifor1.html" class="logo">iFor1</a>
             <nav>
