@@ -3,24 +3,22 @@
 .alice-regular {
     font-family: "Alice", serif;
     font-weight: 400;
-    font-style: normal;
-  }
-  
-.rubik{
+}
+
+.rubik {
     font-family: "Rubik", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
-  }
+}
+
 .bebas-neue-regular {
     font-family: "Bebas Neue", sans-serif;
     font-weight: 400;
-    font-style: normal;
-  }
-  
+}
+
 .ribeye-marrow-regular {
     font-family: "Ribeye Marrow", serif;
     font-weight: 400;
-    font-style: normal;
 }
 
 .logo {
@@ -29,9 +27,11 @@
     font-weight: 400;
     font-family: "Ribeye Marrow";
     text-decoration: none;
+    text-align: center;
+    width: auto;
 }
 
-/* Cabeçalho e navegação - MODIFICADO (FIXO) */
+/* Cabeçalho fixo */
 header {
     background: linear-gradient(135deg, #45568E, #849DC1);
     color: white;
@@ -49,16 +49,19 @@ header {
     justify-content: space-between;
     align-items: center;
 }
-nav ul {
+
+.nav-desktop ul {
     display: flex;
     list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-nav ul li {
+.nav-desktop ul li {
     margin-left: 25px;
 }
 
-nav ul li a {
+.nav-desktop ul li a {
     color: white;
     text-decoration: none;
     font-weight: 400;
@@ -68,6 +71,110 @@ nav ul li a {
     font-family: 'Alice', serif;
 }
 
-nav ul li a:hover {
+.nav-desktop ul li a:hover {
     background-color: rgba(255, 255, 255, 0.1);
+}
+
+.hamburger {
+    /* border: solid red 1px; */
+    margin-left: auto;
+    display: none;
+    width: 100px;
+    font-size: 1.8rem;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    line-height: 1;
+}
+
+/* Painel mobile (abre da direita para a esquerda) */
+.navBox {
+    position: fixed;
+    right: 0;
+    /* top será ajustado via JS para ficar logo abaixo do header */
+    width: 70%;
+    height: calc(100vh - var(--nav-top, 0px));
+    background: linear-gradient(135deg, #45568E, #849DC1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 20px;
+    transform: translateX(100%);
+    transition: transform 0.35s ease-in-out;
+    z-index: 998;
+    /* abaixo do header (1000), acima do conteúdo */
+}
+
+.navBox ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.navBox ul li {
+    margin: 14px 0;
+}
+
+.navBox ul li a {
+    font-size: 1.2rem;
+    color: #fff;
+    text-decoration: none;
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    font-family: 'Alice', serif;
+}
+
+.navBox ul li a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.navBox.active {
+    transform: translateX(0);
+}
+
+/* Botão "X" dentro do painel */
+.close-nav {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 1.8rem;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    line-height: 1;
+}
+
+/* Backdrop para clicar fora e fechar (não cobre o header) */
+.navBackdrop {
+    position: fixed;
+    left: 0;
+    /* top será ajustado via JS para ficar abaixo do header */
+    width: 100%;
+    height: calc(100vh - var(--nav-top, 0px));
+    background: rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    z-index: 997;
+}
+
+.navBackdrop.show {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+    .nav-desktop {
+        display: none;
+    }
+
+    .hamburger {
+        display: block;
+    }
 }
