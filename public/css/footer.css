@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Alice&family=Bebas+Neue&family=Ribeye+Marrow&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+        
+/* Rodapé */
+footer {
+    background: linear-gradient(135deg, #45568E, #849DC1);
+    color: white;
+    padding: 40px 0;
+    text-align: center;
+}
+
+.footer-content {
+    font-family: 'Rubik';
+    font-weight: 400;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.footer-logo {
+    font-family: 'Ribeye Marrow', serif;
+    font-weight: 400;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+.footer-links {
+    font-family: 'Alice', serif;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.footer-links a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: #ff6b6b;
+}

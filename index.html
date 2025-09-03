@@ -8,51 +8,7 @@
     <link rel="stylesheet" href="./public/css/hero.css">
     <link rel="stylesheet" href="./public/css/style.css">
     <link rel="stylesheet" href="./public/css/sections.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Alice&family=Bebas+Neue&family=Ribeye+Marrow&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
-        
-        /* Rodapé */
-        footer {
-            background-color: #2c3e50;
-            color: white;
-            padding: 40px 0;
-            text-align: center;
-        }
-        
-        .footer-content {
-            font-family: 'Rubik';
-            font-weight: 400;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .footer-logo {
-            font-family: 'Ribeye Marrow', serif;
-            font-weight: 400;
-            font-size: 28px;
-            margin-bottom: 20px;
-        }
-        
-        .footer-links {
-            font-family: 'Alice', serif;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-bottom: 20px;
-        }
-        
-        .footer-links a {
-            color: white;
-            margin: 0 15px;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        
-        .footer-links a:hover {
-            color: #ff6b6b;
-        }
-    </style>
+    <link rel="stylesheet   " href="./public/css/footer.css">
 </head>
 <body>
     <!-- Não mexer no header -->
@@ -139,21 +95,10 @@
 
 
         <!-- Rodapé -->
-        <footer>
-            <div class="container footer-content">
-                <div class="footer-logo">iFacess</div>
-                <div class="footer-links">
-                    <a href="#">Inicio</a>
-                    <a href="#">Sobre</a>
-                    <a href="#">Projetos</a>
-                    <a href="#">Parceiros</a>
-                    <a href="#">Fórum</a>
-                </div>
-                <p>&copy;2025 iFacess - Todos os direitos reservados</p>
-            </div>
-        </footer>
+        <div id="footer"></div>
     </div>
     <script src="/src/js/header.js"></script>
+    <script src="/src/js/footer.js"></script>
     <script>        // Pequeno script para melhorar a experiência de scroll
         document.addEventListener('DOMContentLoaded', function() {
             const header = document.querySelector('header');
