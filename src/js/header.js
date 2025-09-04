@@ -1,5 +1,6 @@
 function loadHeader() {
     const path = window.location.pathname;
+
   
     // ========= Marca (logo/título) + LINKS por rota =========
     let brandHTML = `<a href="index.html" class="logo">iFacess</a>`;
@@ -13,7 +14,7 @@ function loadHeader() {
   
     // ifBraille
     if (path.includes("ifbraille.html") || path.includes("/ifbraille/")) {
-      brandHTML = `<img src='../../../src/img/ifbraille/ifbraille_white.png' style="width:110px;" alt="IFBraille">`;
+      brandHTML = `<a href="index.html" class="logo">iFacess</a> <img src='../../../src/img/ifbraille/ifbraille_white.png' style="width:110px; margin-left: " alt="IFBraille">`;
       linksHTML = `
         <li><a href="#">Início</a></li>
         <li><a href="#">Sobre</a></li>
@@ -45,8 +46,6 @@ function loadHeader() {
           <button class="hamburger" aria-label="Abrir menu" aria-expanded="false">☰</button>
         </div>
       </header>
-  
-      <!-- Offcanvas e backdrop -->
       <div class="navBox" aria-hidden="true" role="dialog">
         <ul>${linksHTML}</ul>
       </div>
@@ -141,4 +140,26 @@ function loadHeader() {
   }
   
   document.addEventListener("DOMContentLoaded", loadHeader);
-  
+
+  // experiência do scroll
+  document.addEventListener('DOMContentLoaded', function() {
+    const header = document.querySelector('header');
+    const heroSection = document.querySelector('.hero');
+    
+    // Ajustar o padding do hero para compensar a altura do header fixo
+    function adjustHeroPadding() {
+        const headerHeight = header.offsetHeight;
+        heroSection.style.paddingTop = (headerHeight + 40) + 'px';
+    }
+    adjustHeroPadding();
+    window.addEventListener('resize', adjustHeroPadding);
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+            header.style.padding = '10px 0';
+            header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.2)';
+        } else {
+            header.style.padding = '15px 0';
+            header.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.1)';
+        }
+    });
+});
