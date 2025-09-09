@@ -9,26 +9,26 @@ function loadHeader() {
       <li><a href="#">Sobre</a></li>
       <li><a href="#anchor_projects">Projetos</a></li>
       <li><a href="#">Parceiros</a></li>
-      <li><a href="/public/html/forum/ifor1.html">Fórum</a></li>
-    `;
+      <li><a href="/forum">Fórum</a></li>
+    `;  
   
     // ifBraille
-    if (path.includes("ifbraille.html") || path.includes("/ifbraille/")) {
-      brandHTML = `<a href="index.html" class="logo">iFacess</a> <img src='../../../src/img/ifbraille/ifbraille_white.png' style="width:110px; margin-left: " alt="IFBraille">`;
+    if (path.includes("ifbraille.html") || path.includes("/ifbraille")) {
+      brandHTML = `<a href="" class="logo">iFacess</a> <img src='../../../src/img/ifbraille/ifbraille_white.png' style="width:110px; margin-left: " alt="IFBraille">`;
       linksHTML = `
         <li><a href="#">Início</a></li>
         <li><a href="#">Sobre</a></li>
         <li><a href="#">Aulas</a></li>
-        <li><a href="../../../public/html/forum/ifor1.html">Fórum</a></li>
-        <li><a href="../../../index.html">iFacess</a></li>
+        <li><a href="/forum">Fórum</a></li>
+        <li><a href="/">iFacess</a></li>
       `;
     }
   
     // iFor1
-    if (path.includes("ifor1.html") || path.includes("/forum/")) {
-      brandHTML = `<a href="../../../public/html/forum/ifor1.html" class="logo">iFor1</a>`;
+    if (path.includes("ifor1.html") || path.includes("/forum")) {
+      brandHTML = `<a href="#" class="logo">iFor1</a>`;
       linksHTML = `
-        <li><a href="../../../index.html">Inicio</a></li>
+        <li><a href="/">Inicio</a></li>
         <li><a href="#">Sobre</a></li>
         <li><a href="#">Regras</a></li>
         <li><a href="#">Categorias</a></li>
