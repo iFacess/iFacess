@@ -16,13 +16,10 @@
 
   let currentUser = users[1]; // usuário logado (simulado)
 
-  // Lista de tags fixas
   const availableTags = ["Desenvolvimento", "Dúvidas", "Problemas Técnicos", "Sugestões", "Outros"];
 
-  // Estrutura: {id, categoryId, title, authorId, tags:[], posts:[{authorId, content, date}]}
   let topics = [];
 
-  // Criar tópicos fake para cada categoria
   categories.forEach((cat, idx) => {
     const randomTag = availableTags[Math.floor(Math.random() * availableTags.length)];
     topics.push({
@@ -37,9 +34,8 @@
     });
   });
 
-  // ===== Estado de navegação =====
   let state = {
-    view: 'categories', // categories, topicList, topicView
+    view: 'categories',
     categoryId: null,
     topicId: null
   };
@@ -47,7 +43,6 @@
   const elContent = document.getElementById('content');
   const elBreadcrumb = document.getElementById('breadcrumb');
 
-  // ===== Utilitários =====
   function formatDate(d) {
     return d.toLocaleString('pt-BR', {dateStyle:'short', timeStyle:'short'});
   }
@@ -56,7 +51,6 @@
     return u ? u.name : 'Desconhecido';
   }
 
-  // ===== Breadcrumb =====
   function renderBreadcrumb() {
     let html = '';
     if(state.view === 'categories') {
@@ -74,7 +68,6 @@
     elBreadcrumb.innerHTML = html;
   }
 
-  // ===== Navegação =====
   window.goTo = function(view, id) {
     state.view = view;
     if(view === 'categories') {
@@ -95,7 +88,6 @@
     render();
   };
 
-  // ===== Categorias =====
   function renderCategories() {
     let html = `<div class="category-list"><h2>Categorias</h2><ul>`;
     categories.forEach(cat => {
@@ -105,7 +97,6 @@
     elContent.innerHTML = html;
   }
 
-  // ===== Lista de tópicos =====
   function renderTopicList() {
     const cat = categories.find(c => c.id === state.categoryId);
     if(!cat) {
@@ -133,7 +124,6 @@
     }
     html += `</div>`;
 
-    // Botão dentro do container, alinhado à direita
     html += `<div style="text-align: right;">
                <button class="create-forum-btn" onclick="showNewTopicForm()">Criar Fórum</button>
              </div>`;
@@ -141,70 +131,65 @@
     elContent.innerHTML = html;
   }
 
-  // Mostrar formulário ao clicar no botão
-window.showNewTopicForm = function() {
-  const cat = categories.find(c => c.id === state.categoryId);
-  let html = `
-    <div class="form-section">
-      <h3>Criar novo tópico</h3>
-      <form id="newTopicForm">
-        <label for="topicTitle">Título:</label>
-        <input type="text" id="topicTitle" name="topicTitle" required minlength="5" maxlength="100" />
-        
-        <label for="topicContent">Mensagem inicial:</label>
-        <textarea id="topicContent" name="topicContent" rows="4" required minlength="10"></textarea>
-        
-        <label>Escolha ao menos uma tag:</label>
-        <div class="tag-options">
-          ${availableTags.map(tag => `
-            <div class="tag-option" data-value="${tag}">${tag}</div>
-          `).join("")}
-        </div>
-        
-        <button type="submit">Criar tópico</button>
-      </form>
-    </div>`;
-  elContent.innerHTML += html;
+  window.showNewTopicForm = function() {
+    const cat = categories.find(c => c.id === state.categoryId);
+    let html = `
+      <div class="form-section">
+        <h3>Criar novo tópico</h3>
+        <form id="newTopicForm">
+          <label for="topicTitle">Título:</label>
+          <input type="text" id="topicTitle" name="topicTitle" required minlength="5" maxlength="100" />
+          
+          <label for="topicContent">Mensagem inicial:</label>
+          <textarea id="topicContent" name="topicContent" rows="4" required minlength="10"></textarea>
+          
+          <label>Escolha ao menos uma tag:</label>
+          <div class="tag-options">
+            ${availableTags.map(tag => `
+              <div class="tag-option" data-value="${tag}">${tag}</div>
+            `).join("")}
+          </div>
+          
+          <button type="submit">Criar tópico</button>
+        </form>
+      </div>`;
+    elContent.innerHTML += html;
 
-  // ===== Controle de seleção das tags =====
-  const tagEls = document.querySelectorAll(".tag-option");
-  tagEls.forEach(el => {
-    el.addEventListener("click", () => {
-      el.classList.toggle("selected");
+    const tagEls = document.querySelectorAll(".tag-option");
+    tagEls.forEach(el => {
+      el.addEventListener("click", () => {
+        el.classList.toggle("selected");
+      });
     });
-  });
 
-  // ===== Submissão =====
-  document.getElementById('newTopicForm').addEventListener('submit', e => {
-    e.preventDefault();
-    const title = e.target.topicTitle.value.trim();
-    const content = e.target.topicContent.value.trim();
-    const tags = [...document.querySelectorAll(".tag-option.selected")].map(el => el.dataset.value);
+    document.getElementById('newTopicForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const title = e.target.topicTitle.value.trim();
+      const content = e.target.topicContent.value.trim();
+      const tags = [...document.querySelectorAll(".tag-option.selected")].map(el => el.dataset.value);
 
-    if(title.length < 5 || content.length < 10) {
-      alert('Preencha título (5+) e mensagem (10+) corretamente.');
-      return;
-    }
-    if(tags.length === 0) {
-      alert('Escolha ao menos uma tag!');
-      return;
-    }
+      if(title.length < 5 || content.length < 10) {
+        alert('Preencha título (5+) e mensagem (10+) corretamente.');
+        return;
+      }
+      if(tags.length === 0) {
+        alert('Escolha ao menos uma tag!');
+        return;
+      }
 
-    const newId = 't' + (topics.length + 1);
-    topics.push({
-      id: newId,
-      categoryId: cat.id,
-      title,
-      authorId: currentUser.id,
-      tags,
-      posts: [{authorId: currentUser.id, content, date: new Date()}]
+      const newId = 't' + (topics.length + 1);
+      topics.push({
+        id: newId,
+        categoryId: cat.id,
+        title,
+        authorId: currentUser.id,
+        tags,
+        posts: [{authorId: currentUser.id, content, date: new Date()}]
+      });
+      goTo('topicView', newId);
     });
-    goTo('topicView', newId);
-  });
-};
+  };
 
-
-  // ===== Visualização do tópico =====
   function renderTopicView() {
     const topic = topics.find(t => t.id === state.topicId);
     if(!topic) {
@@ -227,7 +212,6 @@ window.showNewTopicForm = function() {
     });
     html += `</div>`;
 
-    // Form para responder
     html += `
     <div class="form-section">
       <h3>Responder tópico</h3>
@@ -251,7 +235,6 @@ window.showNewTopicForm = function() {
     });
   }
 
-  // ===== Render principal =====
   function render() {
     renderBreadcrumb();
     if(state.view === 'categories') renderCategories();
