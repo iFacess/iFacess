@@ -1,3 +1,7 @@
+body {
+    /* Adiciona um espaço no topo para não ficar atrás do cabeçalho fixo */
+    padding-top: 100px; /* Você pode ajustar este valor se o cabeçalho for maior ou menor */
+}
 * {
     margin: 0;
     padding: 0;

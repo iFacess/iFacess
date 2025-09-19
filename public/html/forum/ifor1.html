@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Fórum</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="../../../public/css/header.css">
     <link rel="stylesheet" href="../../../public/css/hero.css">
     <link rel="stylesheet" href="../../../public/css/style.css">
@@ -11,31 +12,34 @@
     <link rel="stylesheet" href="../../../public/css/footer.css">
     <link rel="stylesheet" href="../../../public/css/forum.css">
 </head>
-<body>
+    <body>
     <div id="header"></div>
-
-    <section class="section" style="margin-top: 3rem;">
+    <div id="auth-section">Carregando...</div>
+    
+    <section class="section" style="padding-top: 3rem; padding-bottom: 1rem;">
         <div class="container">
-            <h2 class="section-title" >Fórum online</h2>
+            <h2 class="section-title">Fórum Online</h2>
         </div>
     </section>
+
     <main>
-  
         <nav class="breadcrumb" id="breadcrumb"></nav>
-      
         <section id="content">
-          <!-- Conteúdo dinâmico aparece aqui -->
+            <!-- Conteúdo dinâmico aparece aqui -->
         </section>
     </main>
 
-    <section class="section" style="margin-top: 0.5rem;">
-        <div class="container">
-            <p style="text-align: justify; width: 70%; margin: 0 auto;">Utilize o fórum para tirar dúvidas, auxiliar colegas e colaborar com projetos! Consulte as regras do fórum abaixo: <br><a href="#">Regras aqui!</a></p>
+    <section class="section" style="padding: 0.5rem 0;">
+        <div class="container" style="width: 100%;">
+            <p style="text-align: justify;">
+                Utilize o fórum para tirar dúvidas, auxiliar colegas e colaborar com projetos!
+            </p>
         </div>
     </section>
+
     <div id="footer"></div>
-    <script src="../../../src/js/header.js"></script>
-    <script src="../../../src/js/forum.js"></script>
+    </body>
     <script src="../../../src/js/footer.js"></script>
-</body>
+    <script src="../../../src/js/header.js"></script>
+    <script type="module" src="../../../src/js/forum.js"></script>
 </html>

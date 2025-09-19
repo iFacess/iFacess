@@ -1,247 +1,425 @@
-(() => {
-  // ===== Dados simulados (em memória) =====
-  const categories = [
-    {id: 'geral', name: 'Impressoras Braille (Geral)'},
-    {id: 'problemas', name: 'Problemas Técnicos'},
-    {id: 'alunos', name: 'Dúvidas de Alunos'},
-    {id: 'recursos', name: 'Recursos e Tutoriais'},
-    {id: 'anuncios', name: 'Anúncios e Novidades'},
-  ];
+// ==================================================================
+// 1. CONFIGURAÇÃO DO SUPABASE
+//    Insira suas credenciais do Supabase aqui.
+// ==================================================================
+const SUPABASE_URL = 'https://hfosdkkujbukurxvhrjr.supabase.co'; // Ex: 'https://xyz.supabase.co'
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imhmb3Nka2t1amJ1a3VyeHZocmpyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTY4NDAyNDYsImV4cCI6MjA3MjQxNjI0Nn0.8mALut0U5erB6mzADvTQ_QPXLibx5EeJfwIWyQzlfhw'; // Ex: 'ey...'
 
-  const users = [
-    {id: 'user1', name: 'Maria'},
-    {id: 'user2', name: 'João'},
-    {id: 'user3', name: 'Ana'},
-  ];
+const { createClient } = supabase;
+const dbClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  let currentUser = users[1]; // usuário logado (simulado)
+// ==================================================================
+// 3. LÓGICA PRINCIPAL DO FÓRUM
+// ==================================================================
+const elContent = document.getElementById('content');
+const elBreadcrumb = document.getElementById('breadcrumb');
+const elAuthSection = document.getElementById('auth-section');
 
-  const availableTags = ["Desenvolvimento", "Dúvidas", "Problemas Técnicos", "Sugestões", "Outros"];
+let state = {
+  view: 'categories',
+  categoryId: null,
+  topicId: null,
+  user: null,
+  allTags: []
+};
 
-  let topics = [];
+function formatDate(d) {
+  return new Date(d).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+}
 
-  categories.forEach((cat, idx) => {
-    const randomTag = availableTags[Math.floor(Math.random() * availableTags.length)];
-    topics.push({
-      id: 'demo' + idx,
-      categoryId: cat.id,
-      title: `Exemplo de fórum em ${cat.name}`,
-      authorId: users[Math.floor(Math.random()*users.length)].id,
-      tags: [randomTag],
-      posts: [
-        {authorId: currentUser.id, content: 'Este é um post de demonstração para mostrar tags.', date: new Date()}
-      ]
+async function renderBreadcrumb() {
+  let html = '';
+  if (state.view === 'categories') {
+    html = `<span><b>Início</b></span>`;
+  } else if (state.view === 'topicList') {
+    const { data: cat } = await dbClient.from('categoria').select('nome').eq('categoria_id', state.categoryId).single();
+    html = `<span onclick="goTo('categories')">Início</span> &raquo; <span><b>${cat ? cat.nome : ''}</b></span>`;
+  } else if (state.view === 'topicView') {
+    const { data: topic } = await dbClient.from('forum').select('title, categoria(nome, categoria_id)').eq('forum_id', state.topicId).single();
+    if (topic) {
+      html = `<span onclick="goTo('categories')">Início</span> &raquo; <span onclick="goTo('topicList', '${topic.categoria.categoria_id}')">${topic.categoria.nome}</span> &raquo; <span><b>${topic.title}</b></span>`;
+    }
+  }
+  elBreadcrumb.innerHTML = html;
+}
+
+window.goTo = function (view, id = null) {
+  state.view = view;
+  if (view === 'categories') {
+    state.categoryId = null;
+    state.topicId = null;
+  } else if (view === 'topicList') {
+    state.categoryId = id;
+    state.topicId = null;
+  } else if (view === 'topicView') {
+    state.topicId = id;
+  }
+  render();
+};
+
+async function renderCategories() {
+  elContent.innerHTML = `<p>Carregando categorias...</p>`;
+  const { data, error } = await dbClient.from('categoria').select('*');
+
+  if (error) {
+    elContent.innerHTML = `<p>Erro ao carregar categorias. Tente novamente.</p>`;
+    console.error(error);
+    return;
+  }
+
+  let html = `<div class="category-list"><h2>Categorias</h2><ul>`;
+  data.forEach(cat => {
+    html += `<li onclick="goTo('topicList', '${cat.categoria_id}')">${cat.nome}</li>`;
+  });
+  html += `</ul></div>`;
+  elContent.innerHTML = html;
+}
+
+async function renderTopicList() {
+  elContent.innerHTML = `<p>Carregando tópicos...</p>`;
+  const { data: cat, error: catError } = await dbClient.from('categoria').select('nome').eq('categoria_id', state.categoryId).single();
+  if (catError || !cat) {
+    elContent.innerHTML = '<p>Categoria não encontrada.</p>';
+    return;
+  }
+
+  const { data: topics, error: topicsError } = await dbClient
+    .from('forum')
+    .select('*, usuario(nome), forum_tag(tag(name)))')
+    .eq('categoria_id', state.categoryId);
+
+  if (topicsError) {
+    elContent.innerHTML = `<p>Erro ao carregar tópicos.</p>`;
+    console.error(topicsError);
+    return;
+  }
+
+  let html = `<div class="topic-list"><h2>${cat.nome}</h2>`;
+  if (topics.length === 0) {
+    html += `<p><i>Sem tópicos ainda. Crie o primeiro!</i></p>`;
+  } else {
+    topics.forEach(t => {
+      const tagHTML = t.forum_tag.map(ft => `<span class="tag">${ft.tag.name}</span>`).join(" ");
+      html += `
+                        <div class="topic-card" onclick="goTo('topicView','${t.forum_id}')">
+                          <div class="topic-header">
+                            <h3>${t.title}</h3>
+                            <div class="tags">${tagHTML}</div>
+                          </div>
+                          <div class="topic-meta">Criado por ${t.usuario.nome || 'Anônimo'} em ${formatDate(t.criado_em)}</div>
+                        </div>`;
     });
+  }
+  html += `</div>`;
+
+  if (state.user) {
+    html += `<div style="text-align: right;">
+                             <button class="create-forum-btn" onclick="showNewTopicForm()">Criar Fórum</button>
+                           </div>`;
+  } else {
+    html += `<p style="margin-top: 1rem;"><i>Faça login para criar um novo fórum.</i></p>`;
+  }
+
+  elContent.innerHTML = html;
+}
+
+window.showNewTopicForm = async function () {
+  let formHtml = `
+              <div class="form-section">
+                <h3>Criar novo Fórum</h3>
+                <form id="newTopicForm">
+                  <label for="topicTitle">Título:</label>
+                  <input type="text" id="topicTitle" name="topicTitle" required minlength="5" maxlength="100" />
+                  
+                  <label for="topicContent">Mensagem inicial:</label>
+                  <textarea id="topicContent" name="topicContent" rows="4" required minlength="10"></textarea>
+                  
+                  <label>Escolha ao menos uma tag:</label>
+                  <div class="tag-options">
+                    ${state.allTags.map(tag => `
+                      <div class="tag-option" data-id="${tag.tag_id}">${tag.name}</div>
+                    `).join("")}
+                  </div>
+                  
+                  <button type="submit">Criar fórum</button>
+                </form>
+              </div>`;
+  elContent.innerHTML += formHtml;
+
+  document.querySelectorAll(".tag-option").forEach(el => {
+    el.addEventListener("click", () => el.classList.toggle("selected"));
   });
 
-  let state = {
-    view: 'categories',
-    categoryId: null,
-    topicId: null
-  };
+  document.getElementById('newTopicForm').addEventListener('submit', handleNewTopicSubmit);
+  document.querySelector('.create-forum-btn').style.display = 'none';
+};
 
-  const elContent = document.getElementById('content');
-  const elBreadcrumb = document.getElementById('breadcrumb');
+async function handleNewTopicSubmit(e) {
+  e.preventDefault();
+  const form = e.target;
+  const submitButton = form.querySelector('button[type="submit"]');
+  submitButton.disabled = true;
+  submitButton.textContent = "Criando...";
 
-  function formatDate(d) {
-    return d.toLocaleString('pt-BR', {dateStyle:'short', timeStyle:'short'});
-  }
-  function findUserName(id) {
-    const u = users.find(u => u.id === id);
-    return u ? u.name : 'Desconhecido';
-  }
+  const title = form.topicTitle.value.trim();
+  const content = form.topicContent.value.trim();
+  const selectedTags = [...document.querySelectorAll(".tag-option.selected")].map(el => el.dataset.id);
 
-  function renderBreadcrumb() {
-    let html = '';
-    if(state.view === 'categories') {
-      html = `<span><b>Início</b></span>`;
-    }
-    else if(state.view === 'topicList') {
-      const cat = categories.find(c => c.id === state.categoryId);
-      html = `<span style="cursor:pointer" onclick="goTo('categories')">Início</span> &raquo; <span><b>${cat ? cat.name : ''}</b></span>`;
-    }
-    else if(state.view === 'topicView') {
-      const cat = categories.find(c => c.id === state.categoryId);
-      const top = topics.find(t => t.id === state.topicId);
-      html = `<span style="cursor:pointer" onclick="goTo('categories')">Início</span> &raquo; <span style="cursor:pointer" onclick="goTo('topicList', '${state.categoryId}')">${cat ? cat.name : ''}</span> &raquo; <span><b>${top ? top.title : ''}</b></span>`;
-    }
-    elBreadcrumb.innerHTML = html;
+  if (title.length < 5 || content.length < 10 || selectedTags.length === 0) {
+    alert('Preencha todos os campos e selecione ao menos uma tag.');
+    submitButton.disabled = false;
+    submitButton.textContent = "Criar fórum";
+    return;
   }
 
-  window.goTo = function(view, id) {
-    state.view = view;
-    if(view === 'categories') {
-      state.categoryId = null;
-      state.topicId = null;
-    }
-    else if(view === 'topicList') {
-      state.categoryId = id;
-      state.topicId = null;
-    }
-    else if(view === 'topicView') {
-      const topic = topics.find(t => t.id === id);
-      if(topic) {
-        state.topicId = id;
-        state.categoryId = topic.categoryId;
-      }
-    }
-    render();
-  };
+  const { data: forumData, error: forumError } = await dbClient
+    .from('forum')
+    .insert({ title, categoria_id: state.categoryId, usuario_id: state.user.id })
+    .select()
+    .single();
 
-  function renderCategories() {
-    let html = `<div class="category-list"><h2>Categorias</h2><ul>`;
-    categories.forEach(cat => {
-      html += `<li onclick="goTo('topicList', '${cat.id}')">${cat.name}</li>`;
-    });
-    html += `</ul></div>`;
-    elContent.innerHTML = html;
+  if (forumError) {
+    console.error("Erro ao criar fórum:", forumError);
+    alert("Não foi possível criar o fórum.");
+    submitButton.disabled = false;
+    submitButton.textContent = "Criar fórum";
+    return;
   }
 
-  function renderTopicList() {
-    const cat = categories.find(c => c.id === state.categoryId);
-    if(!cat) {
-      elContent.innerHTML = '<p>Categoria não encontrada.</p>';
-      return;
-    }
-    const catTopics = topics.filter(t => t.categoryId === cat.id);
-    let html = `<div class="topic-list"><h2>${cat.name}</h2>`;
+  const newForumId = forumData.forum_id;
 
-    if(catTopics.length === 0) html += `<p><i>Sem tópicos ainda. Crie um!</i></p>`;
-    else {
-      catTopics.forEach(t => {
-        const preview = t.posts[0]?.content.slice(0,200) + "...";
-        const tagHTML = t.tags.map(tag => `<span class="tag">${tag}</span>`).join(" ");
-        html += `
-          <div class="topic-card" onclick="goTo('topicView','${t.id}')">
-            <div class="topic-header">
-              <h3>${t.title}</h3>
-              <div class="tags">${tagHTML}</div>
-            </div>
-            <div class="topic-meta">Criado por ${findUserName(t.authorId)} - ${formatDate(t.posts[0].date)}</div>
-            <div class="topic-preview">${preview}</div>
-          </div>`;
-      });
-    }
-    html += `</div>`;
+  const { error: postError } = await dbClient.from('post').insert({
+    conteudo: content, forum_id: newForumId, usuario_id: state.user.id
+  });
 
-    html += `<div style="text-align: right;">
-               <button class="create-forum-btn" onclick="showNewTopicForm()">Criar Fórum</button>
-             </div>`;
+  const tagsToInsert = selectedTags.map(tagId => ({ forum_id: newForumId, tag_id: tagId }));
+  const { error: tagsError } = await dbClient.from('forum_tag').insert(tagsToInsert);
 
-    elContent.innerHTML = html;
+  if (postError || tagsError) {
+    alert("Fórum criado, mas houve um erro ao salvar o post ou as tags.");
   }
 
-  window.showNewTopicForm = function() {
-    const cat = categories.find(c => c.id === state.categoryId);
-    let html = `
-      <div class="form-section">
-        <h3>Criar novo tópico</h3>
-        <form id="newTopicForm">
-          <label for="topicTitle">Título:</label>
-          <input type="text" id="topicTitle" name="topicTitle" required minlength="5" maxlength="100" />
-          
-          <label for="topicContent">Mensagem inicial:</label>
-          <textarea id="topicContent" name="topicContent" rows="4" required minlength="10"></textarea>
-          
-          <label>Escolha ao menos uma tag:</label>
-          <div class="tag-options">
-            ${availableTags.map(tag => `
-              <div class="tag-option" data-value="${tag}">${tag}</div>
-            `).join("")}
-          </div>
-          
-          <button type="submit">Criar tópico</button>
-        </form>
-      </div>`;
-    elContent.innerHTML += html;
+  goTo('topicView', newForumId);
+}
 
-    const tagEls = document.querySelectorAll(".tag-option");
-    tagEls.forEach(el => {
-      el.addEventListener("click", () => {
-        el.classList.toggle("selected");
-      });
-    });
+async function renderTopicView() {
+  elContent.innerHTML = `<p>Carregando tópico...</p>`;
+  const { data: topic, error: topicError } = await dbClient
+    .from('forum')
+    .select('*, usuario(nome), forum_tag(tag(name)))')
+    .eq('forum_id', state.topicId)
+    .single();
 
-    document.getElementById('newTopicForm').addEventListener('submit', e => {
-      e.preventDefault();
-      const title = e.target.topicTitle.value.trim();
-      const content = e.target.topicContent.value.trim();
-      const tags = [...document.querySelectorAll(".tag-option.selected")].map(el => el.dataset.value);
+  if (topicError || !topic) {
+    elContent.innerHTML = '<p>Tópico não encontrado.</p>';
+    return;
+  }
 
-      if(title.length < 5 || content.length < 10) {
-        alert('Preencha título (5+) e mensagem (10+) corretamente.');
-        return;
-      }
-      if(tags.length === 0) {
-        alert('Escolha ao menos uma tag!');
-        return;
-      }
+  const { data: posts, error: postsError } = await dbClient
+    .from('post')
+    .select('*, usuario(nome)')
+    .eq('forum_id', state.topicId)
+    .order('criado_em', { ascending: true });
 
-      const newId = 't' + (topics.length + 1);
-      topics.push({
-        id: newId,
-        categoryId: cat.id,
-        title,
-        authorId: currentUser.id,
-        tags,
-        posts: [{authorId: currentUser.id, content, date: new Date()}]
-      });
-      goTo('topicView', newId);
-    });
-  };
+  const tagHTML = topic.forum_tag.map(ft => `<span class="tag">${ft.tag.name}</span>`).join(" ");
+  let html = `<div class="topic-view">
+                <h2>${topic.title}</h2>
+                <div class="tags">${tagHTML}</div>
+                <div class="topic-meta">Criado por ${topic.usuario.nome || 'Anônimo'} em ${formatDate(topic.criado_em)}</div>
+                <div class="posts-list" style="margin-top: 1rem;">`;
 
-  function renderTopicView() {
-    const topic = topics.find(t => t.id === state.topicId);
-    if(!topic) {
-      elContent.innerHTML = '<p>Tópico não encontrado.</p>';
-      return;
-    }
-    const tagHTML = topic.tags.map(tag => `<span class="tag">${tag}</span>`).join(" ");
-    let html = `<div class="topic-view">
-      <h2>${topic.title}</h2>
-      <div class="tags">${tagHTML}</div>
-      <div><i>Criado por ${findUserName(topic.authorId)}</i></div>
-      <div class="posts-list">`;
+  posts.forEach(post => {
+    html += `<div class="topic-post">
+                  <strong>${post.usuario.nome || 'Anônimo'}</strong>
+                  <small>${formatDate(post.criado_em)}</small>
+                  <p>${post.conteudo.replace(/\n/g, '<br>')}</p>
+                </div>`;
+  });
+  html += `</div>`;
 
-    topic.posts.forEach((post) => {
-      html += `<div class="topic-post">
-        <strong>${findUserName(post.authorId)}</strong>
-        <small>${formatDate(post.date)}</small>
-        <p>${post.content.replace(/\n/g, '<br>')}</p>
-      </div>`;
-    });
-    html += `</div>`;
-
+  if (state.user) {
     html += `
-    <div class="form-section">
-      <h3>Responder tópico</h3>
-      <form id="replyForm">
-        <textarea id="replyContent" rows="4" required minlength="5" placeholder="Sua resposta..."></textarea>
-        <button type="submit">Enviar resposta</button>
-      </form>
-    </div>`;
+                  <div class="form-section">
+                    <h3>Responder tópico</h3>
+                    <form id="replyForm">
+                      <textarea id="replyContent" rows="4" required minlength="5" placeholder="Sua resposta..."></textarea>
+                      <button type="submit">Enviar resposta</button>
+                    </form>
+                  </div>`;
+  } else {
+    html += `<p style="margin-top: 1rem;"><i>Faça login para responder.</i></p>`;
+  }
 
-    elContent.innerHTML = html;
+  elContent.innerHTML = html;
 
-    document.getElementById('replyForm').addEventListener('submit', e => {
-      e.preventDefault();
-      const content = e.target.replyContent.value.trim();
-      if(content.length < 5) {
-        alert('Resposta muito curta.');
-        return;
-      }
-      topic.posts.push({authorId: currentUser.id, content, date: new Date()});
-      renderTopicView();
+  if (state.user) {
+    document.getElementById('replyForm').addEventListener('submit', handleReplySubmit);
+  }
+}
+
+async function handleReplySubmit(e) {
+  e.preventDefault();
+  const form = e.target;
+  const submitButton = form.querySelector('button[type="submit"]');
+  const content = form.replyContent.value.trim();
+
+  if (content.length < 5) {
+    alert('Resposta muito curta.');
+    return;
+  }
+
+  submitButton.disabled = true;
+  submitButton.textContent = "Enviando...";
+
+  const { error } = await dbClient.from('post').insert({
+    conteudo: content, forum_id: state.topicId, usuario_id: state.user.id
+  });
+
+  if (error) {
+    console.error("Erro ao responder:", error);
+    alert("Não foi possível enviar sua resposta.");
+  }
+  renderTopicView();
+}
+
+function render() {
+  renderBreadcrumb();
+  if (state.view === 'categories') renderCategories();
+  else if (state.view === 'topicList') renderTopicList();
+  else if (state.view === 'topicView') renderTopicView();
+  else elContent.innerHTML = '<p>Visualização inválida.</p>';
+}
+
+// ==================================================================
+// 4. LÓGICA DE AUTENTICAÇÃO
+// ==================================================================
+
+function renderAuthUI() {
+  if (state.user) {
+    elAuthSection.innerHTML = `
+                  <div class="user-info">
+                    <p>Logado como: <strong>${state.user.email}</strong></p>
+                    <button id="logoutBtn">Sair</button>
+                  </div>
+                `;
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await dbClient.auth.signOut();
     });
+  } else {
+    elAuthSection.innerHTML = `
+                   <div class="auth-container">
+                       <form id="login-form" class="auth-form">
+                           <h3>Entrar</h3>
+                           <input type="email" id="login-email" placeholder="Seu e-mail" required />
+                           <input type="password" id="login-password" placeholder="Sua senha" required />
+                           <button type="submit">Entrar</button>
+                           <button type="button" class="google-btn">Entrar com Google</button>
+                       </form>
+
+                       <form id="signup-form" class="auth-form">
+                           <h3>Registrar-se</h3>
+                           <input type="text" id="signup-name" placeholder="Seu nome" required />
+                           <input type="email" id="signup-email" placeholder="Seu e-mail" required />
+                           <input type="password" id="signup-password" placeholder="Crie uma senha" required />
+                           <button type="submit">Criar Conta</button>
+                       </form>
+                       
+                       <div class="form-toggle">
+                           <p id="toggle-p">Não tem uma conta? <a id="show-signup">Registre-se</a></p>
+                       </div>
+                   </div>
+                 `;
+
+    document.getElementById('login-form').addEventListener('submit', handleEmailLogin);
+    document.getElementById('signup-form').addEventListener('submit', handleEmailSignUp);
+    document.querySelector('.google-btn').addEventListener('click', handleGoogleLogin);
+
+    const showSignupLink = document.getElementById('show-signup');
+
+    const toggleForms = () => {
+      const loginForm = document.getElementById('login-form');
+      const signupForm = document.getElementById('signup-form');
+      const toggleP = document.getElementById('toggle-p');
+
+      if (signupForm.style.display === 'block') {
+        loginForm.style.display = 'block';
+        signupForm.style.display = 'none';
+        toggleP.innerHTML = 'Não tem uma conta? <a id="show-signup">Registre-se</a>';
+        document.getElementById('show-signup').addEventListener('click', toggleForms);
+      } else {
+        loginForm.style.display = 'none';
+        signupForm.style.display = 'block';
+        toggleP.innerHTML = 'Já tem uma conta? <a id="show-login">Entrar</a>';
+        document.getElementById('show-login').addEventListener('click', toggleForms);
+      }
+    };
+
+    showSignupLink.addEventListener('click', toggleForms);
+  }
+}
+
+async function handleEmailLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  const { error } = await dbClient.auth.signInWithPassword({ email, password });
+  if (error) alert(`Erro no login: ${error.message}`);
+}
+
+async function handleEmailSignUp(e) {
+  e.preventDefault();
+  const name = document.getElementById('signup-name').value;
+  const email = document.getElementById('signup-email').value;
+  const password = document.getElementById('signup-password').value;
+
+  // Para que o nome seja salvo, é recomendável criar uma Função de Banco de Dados (Trigger) no Supabase
+  // que copie o 'full_name' dos metadados para a sua tabela 'usuario'.
+  // Ex: https://supabase.com/docs/guides/auth/managing-user-data
+  const { data, error } = await dbClient.auth.signUp({
+    email, password, options: { data: { full_name: name } }
+  });
+
+  if (error) {
+    alert(`Erro no registro: ${error.message}`);
+  } else if (data.user) {
+    alert('Registro realizado! Por favor, verifique seu e-mail para confirmar a conta.');
+  }
+}
+
+async function handleGoogleLogin() {
+  const { error } = await dbClient.auth.signInWithOAuth({ provider: 'google' });
+  if (error) console.error('Erro no login com Google:', error);
+}
+
+dbClient.auth.onAuthStateChange((event, session) => {
+  state.user = session ? session.user : null;
+  renderAuthUI();
+  render();
+});
+
+// ==================================================================
+// 5. INICIALIZAÇÃO DA APLICAÇÃO
+// ==================================================================
+async function initializeApp() {
+  if (SUPABASE_URL === 'SUA_URL_SUPABASE_AQUI' || SUPABASE_ANON_KEY === 'SUA_CHAVE_ANON_AQUI') {
+    document.body.innerHTML = `<div style="padding: 2rem; text-align: center; background: #ffdddd; border: 2px solid red;">
+                    <h1>Configuração Incompleta</h1>
+                    <p>Por favor, adicione sua URL e Chave Pública (Anon Key) do Supabase no início do script no arquivo HTML.</p>
+                </div>`;
+    return;
   }
 
-  function render() {
-    renderBreadcrumb();
-    if(state.view === 'categories') renderCategories();
-    else if(state.view === 'topicList') renderTopicList();
-    else if(state.view === 'topicView') renderTopicView();
-    else elContent.innerHTML = '<p>Visualização inválida.</p>';
-  }
+  loadHeader();
+  loadFooter();
+
+  const { data: tags } = await dbClient.from('tag').select('*');
+  if (tags) state.allTags = tags;
+
+  const { data: { session } } = await dbClient.auth.getSession();
+  state.user = session ? session.user : null;
+  renderAuthUI();
 
   render();
-})();
+}
+
+initializeApp();
