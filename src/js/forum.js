@@ -409,8 +409,6 @@ async function initializeApp() {
     return;
   }
 
-  loadHeader();
-  loadFooter();
 
   const { data: tags } = await dbClient.from('tag').select('*');
   if (tags) state.allTags = tags;

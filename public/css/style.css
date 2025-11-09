@@ -24,11 +24,6 @@ html{
     z-index: 50;
     background: #e4e4e4;
 }
-section p{
-    /* text-align: justify;  */
-    /* width: 70%;  */
-    margin: 0 auto;
-}
 
 /* Responsividade */
 @media (max-width: 768px) {
@@ -51,6 +46,7 @@ section p{
         width: 98%;
     }
     .section p{
+        text-align: justify; 
         width: 95%;
         margin: 0 auto;
     }
