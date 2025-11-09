@@ -1,6 +1,8 @@
 body {
-    /* Adiciona um espaço no topo para não ficar atrás do cabeçalho fixo */
-    padding-top: 100px; /* Você pode ajustar este valor se o cabeçalho for maior ou menor */
+    background-color: #E4E4E4;
+    color: #0A0A0A;
+    line-height: 1.6;
+    font-family: 'Rubik', serif;
 }
 * {
     margin: 0;
@@ -10,12 +12,6 @@ body {
 html{
     scroll-behavior: smooth;
 }
-body{
-    background-color: #E4E4E4;
-    color: #0A0A0A;
-    line-height: 1.6;
-    font-family: 'Rubik', serif;
-}
 
 .container {
     width: 90%;
@@ -24,23 +20,19 @@ body{
     padding: 0 15px;
 }
 .main-content {
-    position: relative;
+    margin-top: 30px;
     z-index: 50;
     background: #e4e4e4;
-    margin-top: -60vh; /* Compensação para a altura reduzida do hero */
+}
+section p{
+    /* text-align: justify;  */
+    /* width: 70%;  */
+    margin: 0 auto;
 }
 
 /* Responsividade */
 @media (max-width: 768px) {
     
-    .hero {
-        padding: 100px 0 40px;
-        min-height: 50vh;
-    }
-    
-    .hero h1 {
-        font-size: 2rem;
-    }
     
     .features {
         grid-template-columns: 1fr;
@@ -49,9 +41,18 @@ body{
     .form-section {
         padding: 20px;
     }
-    
-    .main-content {
-        margin-top: -50vh;
+
+    .container {
+        width: 95%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    .section{
+        width: 98%;
+    }
+    .section p{
+        width: 95%;
+        margin: 0 auto;
     }
 }
 
@@ -65,10 +66,6 @@ body{
         opacity: 1;
         transform: translateY(0);
     }
-}
-
-.hero-content {
-    animation: fadeInUp 0.8s ease-out;
 }
 
 .feature-card {
