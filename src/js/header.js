@@ -8,17 +8,16 @@ function loadHeader() {
       <li><a href="/">Inicio</a></li>
       <li><a href="/sobre">Sobre</a></li>
       <li><a href="#anchor_projects">Projetos</a></li>
-      <li><a href="/">Parceiros</a></li>
       <li><a href="/forum">Fórum</a></li>
     `;  
   
     // ifBraille
     if (path.includes("ifbraille.html") || path.includes("/ifbraille")) {
-      brandHTML = `<a href="" class="logo">iFacess</a> <img src='../../../src/img/ifbraille/ifbraille_white.png' style="width:110px; margin-left: " alt="IFBraille">`;
+      brandHTML = `<img src='../../../src/img/ifbraille/ifbraille_white.png' style="width:110px; margin-left: " alt="IFBraille">`;
       linksHTML = `
-        <li><a href="/">Início</a></li>
+        <li><a href="/ifbraille">Início</a></li>
         <li><a href="/sobre">Sobre</a></li>
-        <li><a href="/">Aulas</a></li>
+        <!-- <li><a href="/">Aulas</a></li> -->
         <li><a href="/forum">Fórum</a></li>
         <li><a href="/">iFacess</a></li>
       `;
@@ -144,7 +143,6 @@ function loadHeader() {
   // experiência do scroll
   document.addEventListener('DOMContentLoaded', function() {
     const header = document.querySelector('header');
-    const heroSection = document.querySelector('.hero');
     
     // Ajustar o padding do hero para compensar a altura do header fixo
     function adjustHeroPadding() {
