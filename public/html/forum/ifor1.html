@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +14,7 @@
 </head>
     <body>
     <div id="header"></div>
-    <div id="auth-section">Carregando...</div>
+    <div id="auth-section" style="margin-top: 5rem;">Carregando...</div>
     
     <section class="section" style="padding-top: 3rem; padding-bottom: 1rem;">
         <div class="container">
@@ -25,8 +25,7 @@
     <main>
         <nav class="breadcrumb" id="breadcrumb"></nav>
         <section id="content">
-            <!-- Conteúdo dinâmico aparece aqui -->
-        </section>
+            </section>
     </main>
 
     <section class="section" style="padding: 0.5rem 0;">
@@ -38,6 +37,15 @@
     </section>
 
     <div id="footer"></div>
+
+    <div id="newTopicModal" class="modal-overlay">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeNewTopicForm()">&times;</span>
+            <div id="newTopicFormContainer">
+                </div>
+        </div>
+    </div>
+
     </body>
     <script src="../../../src/js/footer.js"></script>
     <script src="../../../src/js/header.js"></script>

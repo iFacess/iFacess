@@ -15,6 +15,11 @@ const elContent = document.getElementById('content');
 const elBreadcrumb = document.getElementById('breadcrumb');
 const elAuthSection = document.getElementById('auth-section');
 
+// Elementos do Modal - ADICIONADOS
+const elNewTopicModal = document.getElementById('newTopicModal');
+const elNewTopicFormContainer = document.getElementById('newTopicFormContainer');
+
+
 let state = {
   view: 'categories',
   categoryId: null,
@@ -24,10 +29,30 @@ let state = {
 };
 
 function formatDate(d) {
-  return new Date(d).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' });
+  // 1. Adiciona o sufixo 'Z' (Zulu Time) para forçar o JavaScript 
+  //    a interpretar a string 'd' como sendo UTC+0.
+  const utcString = d.endsWith('Z') ? d : `${d}Z`;
+  
+  // 2. Cria o objeto Date (agora representando o tempo UTC+0)
+  const dateObj = new Date(utcString);
+  
+  // 3. Converte e formata esse tempo UTC+0 para o fuso horário de Brasília (UTC-3)
+  return dateObj.toLocaleString('pt-BR', { 
+      dateStyle: 'short', 
+      timeStyle: 'short',
+      timeZone: 'America/Sao_Paulo'
+  });
 }
 
+// Função auxiliar para redimensionar o textarea automaticamente
+function resizeTextarea(el) {
+    el.style.height = 'auto'; // Reseta temporariamente a altura
+    el.style.height = el.scrollHeight + 'px'; // Define a altura com base no conteúdo
+}
+
+
 async function renderBreadcrumb() {
+// ... função omitida para concisão ...
   let html = '';
   if (state.view === 'categories') {
     html = `<span><b>Início</b></span>`;
@@ -44,6 +69,7 @@ async function renderBreadcrumb() {
 }
 
 window.goTo = function (view, id = null) {
+// ... função omitida para concisão ...
   state.view = view;
   if (view === 'categories') {
     state.categoryId = null;
@@ -58,6 +84,7 @@ window.goTo = function (view, id = null) {
 };
 
 async function renderCategories() {
+// ... função omitida para concisão ...
   elContent.innerHTML = `<p>Carregando categorias...</p>`;
   const { data, error } = await dbClient.from('categoria').select('*');
 
@@ -76,6 +103,7 @@ async function renderCategories() {
 }
 
 async function renderTopicList() {
+// ... função omitida para concisão ...
   elContent.innerHTML = `<p>Carregando tópicos...</p>`;
   const { data: cat, error: catError } = await dbClient.from('categoria').select('nome').eq('categoria_id', state.categoryId).single();
   if (catError || !cat) {
@@ -95,6 +123,20 @@ async function renderTopicList() {
   }
 
   let html = `<div class="topic-list"><h2>${cat.nome}</h2>`;
+  
+  // Posiciona o botão no topo à direita do <main> usando CSS position: absolute
+  if (state.user) {
+    // Adiciona o botão Criar Fórum (será posicionado pelo CSS)
+    document.querySelector('main').insertAdjacentHTML('afterbegin', `<button class="create-forum-btn" onclick="showNewTopicForm()">Criar Fórum</button>`);
+  } else {
+    // Remove o botão se existir e exibe a mensagem de login
+    const existingBtn = document.querySelector('.create-forum-btn');
+    if (existingBtn) existingBtn.remove();
+    html += `<p style="text-align: right; font-size: 0.9rem; margin-bottom: 1rem;">
+               <i>Faça login para criar um novo fórum.</i>
+             </p>`;
+  }
+  
   if (topics.length === 0) {
     html += `<p><i>Sem tópicos ainda. Crie o primeiro!</i></p>`;
   } else {
@@ -112,20 +154,15 @@ async function renderTopicList() {
   }
   html += `</div>`;
 
-  if (state.user) {
-    html += `<div style="text-align: right;">
-                             <button class="create-forum-btn" onclick="showNewTopicForm()">Criar Fórum</button>
-                           </div>`;
-  } else {
-    html += `<p style="margin-top: 1rem;"><i>Faça login para criar um novo fórum.</i></p>`;
-  }
-
   elContent.innerHTML = html;
 }
 
 window.showNewTopicForm = async function () {
+  // NOVO: BLOQUEIA SCROLL NO FUNDO DA PÁGINA
+  document.body.classList.add('modal-open'); 
+  
   let formHtml = `
-              <div class="form-section">
+              <div class="form-section" style="border-top: none; margin-top: 0; padding-top: 0;">
                 <h3>Criar novo Fórum</h3>
                 <form id="newTopicForm">
                   <label for="topicTitle">Título:</label>
@@ -144,17 +181,35 @@ window.showNewTopicForm = async function () {
                   <button type="submit">Criar fórum</button>
                 </form>
               </div>`;
-  elContent.innerHTML += formHtml;
+              
+  elNewTopicFormContainer.innerHTML = formHtml;
+  // NOVO: Muda o display para 'flex' para ativar a centralização via CSS Flexbox
+  elNewTopicModal.style.display = 'flex'; 
 
   document.querySelectorAll(".tag-option").forEach(el => {
     el.addEventListener("click", () => el.classList.toggle("selected"));
   });
 
   document.getElementById('newTopicForm').addEventListener('submit', handleNewTopicSubmit);
-  document.querySelector('.create-forum-btn').style.display = 'none';
+
+  // Lógica de auto-redimensionamento para o textarea da mensagem inicial
+  const topicContentEl = document.getElementById('topicContent');
+  if (topicContentEl) {
+    resizeTextarea(topicContentEl);
+    topicContentEl.addEventListener('input', () => resizeTextarea(topicContentEl));
+  }
 };
 
+window.closeNewTopicForm = function () {
+    elNewTopicModal.style.display = 'none';
+    elNewTopicFormContainer.innerHTML = ''; // Limpa o formulário
+    // NOVO: DESBLOQUEIA SCROLL NO FUNDO DA PÁGINA
+    document.body.classList.remove('modal-open');
+};
+
+
 async function handleNewTopicSubmit(e) {
+// ... função omitida para concisão ...
   e.preventDefault();
   const form = e.target;
   const submitButton = form.querySelector('button[type="submit"]');
@@ -198,11 +253,13 @@ async function handleNewTopicSubmit(e) {
   if (postError || tagsError) {
     alert("Fórum criado, mas houve um erro ao salvar o post ou as tags.");
   }
-
+  
+  closeNewTopicForm(); // Fecha o modal após o sucesso
   goTo('topicView', newForumId);
 }
 
 async function renderTopicView() {
+// ... função omitida para concisão ...
   elContent.innerHTML = `<p>Carregando tópico...</p>`;
   const { data: topic, error: topicError } = await dbClient
     .from('forum')
@@ -254,10 +311,18 @@ async function renderTopicView() {
 
   if (state.user) {
     document.getElementById('replyForm').addEventListener('submit', handleReplySubmit);
+    
+    // Lógica de auto-redimensionamento para o textarea de resposta
+    const replyContentEl = document.getElementById('replyContent');
+    if (replyContentEl) {
+        resizeTextarea(replyContentEl);
+        replyContentEl.addEventListener('input', () => resizeTextarea(replyContentEl));
+    }
   }
 }
 
 async function handleReplySubmit(e) {
+// ... função omitida para concisão ...
   e.preventDefault();
   const form = e.target;
   const submitButton = form.querySelector('button[type="submit"]');
@@ -283,6 +348,11 @@ async function handleReplySubmit(e) {
 }
 
 function render() {
+// ... função omitida para concisão ...
+  // Remove o botão de fórum existente (evita duplicidade ao renderizar a lista)
+  const existingBtn = document.querySelector('.create-forum-btn');
+  if (existingBtn) existingBtn.remove();
+  
   renderBreadcrumb();
   if (state.view === 'categories') renderCategories();
   else if (state.view === 'topicList') renderTopicList();
@@ -295,6 +365,7 @@ function render() {
 // ==================================================================
 
 function renderAuthUI() {
+// ... função omitida para concisão ...
   if (state.user) {
     elAuthSection.innerHTML = `
                   <div class="user-info">
@@ -313,8 +384,7 @@ function renderAuthUI() {
                            <input type="email" id="login-email" placeholder="Seu e-mail" required />
                            <input type="password" id="login-password" placeholder="Sua senha" required />
                            <button type="submit">Entrar</button>
-                           <button type="button" class="google-btn">Entrar com Google</button>
-                       </form>
+                           </form>
 
                        <form id="signup-form" class="auth-form">
                            <h3>Registrar-se</h3>
@@ -332,7 +402,6 @@ function renderAuthUI() {
 
     document.getElementById('login-form').addEventListener('submit', handleEmailLogin);
     document.getElementById('signup-form').addEventListener('submit', handleEmailSignUp);
-    document.querySelector('.google-btn').addEventListener('click', handleGoogleLogin);
 
     const showSignupLink = document.getElementById('show-signup');
 
@@ -359,6 +428,7 @@ function renderAuthUI() {
 }
 
 async function handleEmailLogin(e) {
+// ... função omitida para concisão ...
   e.preventDefault();
   const email = document.getElementById('login-email').value;
   const password = document.getElementById('login-password').value;
@@ -367,6 +437,7 @@ async function handleEmailLogin(e) {
 }
 
 async function handleEmailSignUp(e) {
+// ... função omitida para concisão ...
   e.preventDefault();
   const name = document.getElementById('signup-name').value;
   const email = document.getElementById('signup-email').value;
@@ -386,11 +457,6 @@ async function handleEmailSignUp(e) {
   }
 }
 
-async function handleGoogleLogin() {
-  const { error } = await dbClient.auth.signInWithOAuth({ provider: 'google' });
-  if (error) console.error('Erro no login com Google:', error);
-}
-
 dbClient.auth.onAuthStateChange((event, session) => {
   state.user = session ? session.user : null;
   renderAuthUI();
@@ -401,6 +467,7 @@ dbClient.auth.onAuthStateChange((event, session) => {
 // 5. INICIALIZAÇÃO DA APLICAÇÃO
 // ==================================================================
 async function initializeApp() {
+  /*
   if (SUPABASE_URL === 'SUA_URL_SUPABASE_AQUI' || SUPABASE_ANON_KEY === 'SUA_CHAVE_ANON_AQUI') {
     document.body.innerHTML = `<div style="padding: 2rem; text-align: center; background: #ffdddd; border: 2px solid red;">
                     <h1>Configuração Incompleta</h1>
@@ -408,7 +475,7 @@ async function initializeApp() {
                 </div>`;
     return;
   }
-
+  */
 
   const { data: tags } = await dbClient.from('tag').select('*');
   if (tags) state.allTags = tags;
