@@ -235,7 +235,7 @@ async function handleNewTopicSubmit(e) {
 
   if (forumError) {
     console.error("Erro ao criar fórum:", forumError);
-    alert("Não foi possível criar o fórum.");
+    alert("Não foi possível criar o fórum: " + forumError.message);
     submitButton.disabled = false;
     submitButton.textContent = "Criar fórum";
     return;
