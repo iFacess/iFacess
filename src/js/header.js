@@ -3,7 +3,7 @@ function loadHeader() {
 
   
     // ========= Marca (logo/título) + LINKS por rota =========
-    let brandHTML = `<a href="index.html" class="logo">iFacess</a>`;
+    let brandHTML = `<a href="/" class="logo">iFacess</a>`;
     let linksHTML = `
       <li><a href="/">Inicio</a></li>
       <li><a href="/sobre">Sobre</a></li>
@@ -25,7 +25,7 @@ function loadHeader() {
   
     // iFor1
     if (path.includes("ifor1.html") || path.includes("/forum")) {
-      brandHTML = `<a href="#" class="logo">iFor1</a>`;
+      brandHTML = `<a href="/orum" class="logo">iFor1</a>`;
       linksHTML = `
         <li><a href="/">Inicio</a></li>
         <li><a href="/sobre">Sobre</a></li>
@@ -58,7 +58,7 @@ function loadHeader() {
     const heroSection = document.querySelector('.hero');
     const hamburger  = document.querySelector('.hamburger');
     const navBox     = document.querySelector('.navBox');
-    const closeBtn   = document.querySelector('.close-nav');
+    // const closeBtn   = document.querySelector('.close-nav');
     const backdrop   = document.querySelector('.navBackdrop');
   
     // ======= Funções auxiliares =======
@@ -102,7 +102,7 @@ function loadHeader() {
         openNav();
       }
     });
-    closeBtn.addEventListener('click', closeNav);
+    // closeBtn.addEventListener('click', closeNav);
     backdrop.addEventListener('click', closeNav);
   
     // Fecha ao clicar em qualquer link do menu mobile
