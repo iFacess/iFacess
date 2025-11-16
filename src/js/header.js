@@ -25,7 +25,7 @@ function loadHeader() {
   
     // iFor1
     if (path.includes("ifor1.html") || path.includes("/forum")) {
-      brandHTML = `<a href="/orum" class="logo">iFor1</a>`;
+      brandHTML = `<a href="/forum" class="logo">iFor1</a>`;
       linksHTML = `
         <li><a href="/">Inicio</a></li>
         <li><a href="/sobre">Sobre</a></li>
