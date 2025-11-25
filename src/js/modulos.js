@@ -70,9 +70,108 @@ const modulesData = [
         borderColor: "#45568E", // Cor do Site
         imageColor: "#4c1d95", // Roxo escuro
         content: `
-            <p>A Basic-d é uma impressora braille de mesa projetada para oferecer impressão em braille de alta qualidade de forma acessível e fácil de usar. Desenvolvida com a mais recente tecnologia, ela permite que indivíduos, educadores e organizações produzam materiais em braille com rapidez e precisão. Sua construção robusta e design intuitivo a tornam ideal para uso tanto em ambientes domésticos quanto institucionais.</p>
+            <p>A Basic-D é uma impressora braille de mesa projetada para oferecer impressão em braille de alta qualidade de forma acessível e fácil de usar. Desenvolvida com a mais recente tecnologia, ela permite que indivíduos, educadores e organizações produzam materiais em braille com rapidez e precisão. Sua construção robusta e design intuitivo a tornam ideal para uso tanto em ambientes domésticos quanto institucionais.</p>
+            <h3>Sobre a Inclusão</h3>
+            <p>Além de sua função principal de impressão em braille, a Basic-d representa um passo significativo em direção à inclusão e acessibilidade. Ao permitir a produção de materiais em braille sob demanda, ela capacita pessoas com deficiência visual a acessar informações e participar plenamente da sociedade.</p>
+            <ol>
+                <li><b>Facilidade de uso:</b>Interface intuitiva e software amigável tornam a impressão em braille acessível a todos.</li>
+                <li><b>Qualidade de impressão:</b>Produção de pontos braille nítidos e uniformes, garantindo a legibilidade dos materiais.</li>
+                <li><b>Portabilidade:</b>Design compacto e leve permite que a impressora seja facilmente transportada e utilizada em diferentes locais.</li>
+                <li><b>Conectividade versátil:</b>Opções de conexão USB e Bluetooth para impressão a partir de computadores, tablets e smartphones.</li>
+                <li><b>Portabilidade:</b>Design compacto e leve permite que a impressora seja facilmente transportada e utilizada em diferentes locais.</li>
+                <li><b>Durabilidade e confiabilidade:</b>Construção robusta e componentes de alta qualidade garantem o desempenho consistente da impressora ao longo do tempo.</li>
+            </ol>
+            <h3>Tipos de Papel Compatíveis:</h3>
+            <p>A Basic-d é compatível com uma variedade de tipos de papel, incluindo papel braille padrão, papel cartão e etiquetas adesivas. Consulte o manual do usuário para obter informações detalhadas sobre as gramaturas e tamanhos de papel recomendados.</p>
             
-        
+            <h3>Velocidade de Impressão</h3>
+            <p>A velocidade de impressão da Basic-d varia de acordo com o tipo de documento e as configurações de impressão. Consulte as especificações técnicas da impressora para obter informações sobre a velocidade de impressão em diferentes condições.</p>
+
+            <h3>Conectividade:</h3>
+            <p>A Basic-d oferece opções de conectividade USB e Bluetooth, permitindo a impressão a partir de computadores, tablets e smartphones. A conexão Bluetooth permite a impressão sem fio, oferecendo maior flexibilidade e conveniência.</p>
+            
+            <h3>Software Compatível:</h3>
+            <p>A Basic-d é compatível com uma variedade de softwares de edição de texto e tradução para braille, incluindo o Duxbury Braille Translator e o BrailleBlaster.</p>
+            
+            <div class="linha"></div>
+
+            <p>Uma impressora braille funciona de maneira semelhante a uma impressora comum, mas em vez de imprimir tinta no papel, ela cria pontos em relevo que representam os caracteres do sistema braille. O processo básico envolve as seguintes etapas:</p>
+            
+            <h3>Conversão de Texto:</h3>
+            <p>O texto a ser impresso é convertido para braille por meio de um software especializado. Esse software traduz os caracteres alfanuméricos e símbolos em seus equivalentes em braille, que consistem em combinações de seis pontos em relevo.</p>
+            <h3>Envio para a Impressora:</h3>
+            <p>O texto convertido em braille é enviado para a impressora por meio de um computador ou outro dispositivo eletrônico.</p>
+            <h3>Impressão em Relevo:</h3>
+            <p>A impressora utiliza cabeças de impressão com pinos que pressionam o papel, criando os pontos em relevo correspondentes aos caracteres braille. O papel utilizado é um papel especial mais grosso, que permite que os pontos em relevo sejam perceptíveis ao toque.</p>
+            <h3>Leitura do Braille:</h3>
+            <p>Após a impressão, o material em braille pode ser lido por pessoas com deficiência visual, que utilizam o tato para identificar os caracteres em relevo.</p>
+            
+            <div class="linha"></div>
+            <h1>Como Utilizar a Impressora Braille Basic-D V4 – Guia Prático</h1>
+            <p>A <b>Basic-D V4</b> é uma impressora Braille de mesa, compacta e bastante usada em escolas, bibliotecas e centros de acessibilidade. Ela é conhecida por ser confiável e produzir Braille de alta qualidade em papel comum (formulário contínuo).</p>
+            <h3>1. Antes de começar: o que você vai precisar</h3>
+            <ol>
+                <li>A impressora Braille Basic-D V4;</li>
+                <li>Cabo USB ou conexão de rede (dependendo da forma de uso);</li>
+                <li>Papel formulário contínuo de gramatura entre 130g e 180g (tamanho A4 ou similar);</li>
+                <li>Um computador com software compatível instalado (como o Duxbury ou Braille Blaster);</li>
+                <li>Arquivo de texto ou documento a ser impresso.</li>
+            </ol>
+
+            <div class="linha"></div>
+
+            <h3>2. Preparando a impressora</h3>
+            <ol><h4>Passo 1: Ligar a impressora</h4>
+                <li>Conecte a impressora à energia e ao computador via USB ou rede;</li>
+                <li>Ligue a impressora no botão lateral;</li>
+                <li>Espere até ouvir o bip de inicialização. O painel frontal acenderá com as luzes indicando o status.</li>
+            </ol>
+            <ol><h4>Passo 2: Colocando o papel</h4>
+                <li>A Basic-D V4 usa papel formulário contínuo, que tem furos nas laterais;</li>
+                <li>Levante a tampa da impressora;</li>
+                <li>Coloque o papel nos roletes laterais, ajustando os pinos para encaixar nos furos do papel;</li>
+                <li>Gire o botão para alinhar o papel corretamente. A margem deve começar no início da área de impressão;</li>
+                <li>Feche a tampa.</li>
+                <p><b>Dica:</b> O papel precisa estar bem preso para evitar desalinhamentos durante a impressão.</p>
+            </ol>
+
+            <div class="linha"></div>
+
+            <h3>3. Preparando o arquivo para impressão</h3>
+            <ol><h4>Passo 1: Usar um software de transcrição Braille</h4>
+                <li>Os arquivos em texto precisam ser convertidos para Braille antes da impressão;</li>
+                <li>Os softwares mais comuns são:
+                    <ol><p>O software que vem junto com a impressora ou:</p>
+                        <li>Duxbury Braille Translator (DBT) – um dos mais usados no mundo;</li>
+                        <li>Braille Blaster – gratuito e funcional;</li>
+                        <li>EdSharp ou outros editores compatíveis;</li>
+                    </ol>
+                </li>
+            </ol>
+            <ol><h4>Passo 2: Configurar a página</h4>
+                <li>No programa, defina o modelo de impressora como “Basic-D v4” ou “Index Basic-D”;</li>
+                <li>Configure as margens, linhas por página e caracteres por linha, de acordo com o papel usado;</li>
+                <p><b>Exemplo comum:</b> 25 linhas por página, 30 caracteres por linha.</p>
+            </ol>
+            <ol><h4>Passo 3: Converter e revisar</h4>
+                <li>Importe o texto para o software;</li>
+                <li>Revise se os comandos de formatação (como negrito, títulos, listas) estão corretos;</li>
+                <li>Faça a transcrição automática para Braille (normalmente com o botão "Translate" ou "Transcrever").</li>
+            </ol>
+            
+            <div class="linha"></div>
+
+            <h3>4. Imprimindo</h3>
+            <ol><h4>Passo 1: Enviar para a impressora</h4>
+                <li>Com o documento já transcrito, clique em Imprimir;</li>
+                <li>Selecione a Basic-D v4 como impressora padrão;</li>
+                <li>Verifique se o papel está corretamente posicionado;</li>
+                <li>Clique em "OK" para iniciar a impressão.</li>
+            </ol>
+            <ol><h4>Passo 2: Acompanhar o processo</h4>
+                <li>A impressora vai começar a imprimir linha por linha em Braille, fazendo barulho típico de impacto;</li>
+                <li>Você pode observar o avanço do papel automaticamente.</li>
+            </ol>
             `
     },
     

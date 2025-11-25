@@ -199,7 +199,26 @@
     margin: 1rem 0 1rem 2rem;
     padding-left: 1rem;
 }
-
+.linha{
+    height: 2px;
+    background-color: #1e293b;
+    width: 80%;
+    margin: 2.5rem auto;
+}
+.modal-body h1{
+    font-family: 'Rubik', serif;
+    font-weight: 600;
+    text-align: center;
+    color: #1e293b;
+}
+.modal-body h4{
+    font-family: 'Rubik', serif;
+    font-size: 22px;
+    font-weight: 600;
+    text-align: center;
+    color: #1e293b;
+    margin: 0.5rem;
+}
 /* Responsividade */
 @media (max-width: 768px) {
     .modules-title {
