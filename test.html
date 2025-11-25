@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulos de Matérias</title>
+    <!-- Fontes do Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- Configurações Globais --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5; /* Fundo cinza claro */
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* --- Título da Página --- */
+        .main-title {
+            font-family: 'Merriweather', serif; /* Fonte serifada, similar à Times */
+            font-size: 3.5rem;
+            color: #334155;
+            text-align: center;
+            margin-top: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .title-decorator {
+            width: 100px;
+            height: 4px;
+            background-color: #475569;
+            margin: 0 auto 2.5rem auto;
+            border-radius: 2px;
+        }
+
+        /* --- Grid de Cards --- */
+        .card-grid {
+            display: flex;
+            flex-wrap: wrap; /* Permite que os cards quebrem a linha */
+            justify-content: center;
+            gap: 1.5rem; /* Espaçamento entre os cards */
+        }
+
+        /* --- Estilo do Card --- */
+        .card {
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 300px; /* Largura fixa para cada card */
+            border-width: 4px;
+            border-style: solid;
+            cursor: pointer;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            transform: translateY(-5px);
+        }
+
+        .card-image-placeholder {
+            width: 128px; /* 8rem */
+            height: 128px; /* 8rem */
+            border-radius: 50%; /* Círculo perfeito */
+            margin: 0 auto 1.5rem auto;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1e293b;
+            text-align: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .card-preview-text {
+            font-size: 0.9rem;
+            color: #475569;
+            text-align: center;
+            line-height: 1.4rem;
+            height: 5.6rem; /* (4 linhas * 1.4rem de altura de linha) */
+            
+            /* Mágica do truncamento de texto */
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 4; /* Exibe no máximo 4 linhas */
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-link {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #2563eb;
+            text-align: center;
+            display: block;
+            margin-top: 1rem;
+            text-decoration: none;
+        }
+        
+        .card-link:hover {
+            text-decoration: underline;
+        }
+
+        /* --- Estilos do Modal --- */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0; /* (top, right, bottom, left = 0) */
+            background-color: rgba(0, 0, 0, 0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+        }
+
+        .modal-backdrop.hidden {
+            display: none;
+        }
+
+        .modal-content {
+            background-color: #ffffff;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 1100px; /* max-w-6xl */
+            height: 95vh; /* 95% da altura da tela */
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Importante para o scroll interno */
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .modal-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .modal-close {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #94a3b8;
+            cursor: pointer;
+            line-height: 1;
+            transition: color 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: #1e293b;
+        }
+
+        .modal-body {
+            padding: 2rem;
+            overflow-y: auto; /* O scroll acontece AQUI */
+            flex-grow: 1; /* Ocupa todo o espaço restante */
+        }
+
+        /* Estilos para o conteúdo dentro do modal */
+        .modal-body p {
+            font-size: 1.1rem;
+            color: #334155;
+            margin-bottom: 1rem;
+        }
+
+        .modal-body h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .modal-body img {
+            width: 100%;
+            max-width: 600px;
+            height: auto;
+            display: block;
+            margin: 1.5rem auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-body ul, .modal-body ol {
+            font-size: 1.1rem;
+            color: #334155;
+            margin: 1rem 0 1rem 2rem;
+            padding-left: 1rem;
+        }
+        
+        .modal-body li {
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- Responsividade --- */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .main-title {
+                font-size: 2.5rem;
+            }
+
+            .card {
+                width: 100%; /* Ocupa largura total em telas pequenas */
+                max-width: 340px; /* Mas não fica excessivamente largo */
+            }
+
+            .modal-content {
+                height: 90vh; /* Um pouco menor em telas mobile */
+            }
+
+            .modal-header {
+                padding: 1rem 1.5rem;
+            }
+            
+            .modal-title {
+                font-size: 1.25rem;
+            }
+
+            .modal-body {
+                padding: 1.5rem;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Conteúdo principal da página -->
+    <div class="container">
+        <h1 class="main-title">Módulos</h1>
+        <div class="title-decorator"></div>
+
+        <!-- Os cards serão injetados aqui -->
+        <div id="card-container" class="card-grid">
+            <!-- Exemplo de como o card será (gerado por JS)
+            <div class="card" style="border-color: #3b82f6;">
+                <div class="card-image-placeholder" style="background-color: #4338ca;"></div>
+                <h3 class="card-title">Título do Card</h3>
+                <p class="card-preview-text">
+                    Texto de prévia que será truncado...
+                </p>
+                <span class="card-link">Clique para ver mais</span>
+            </div>
+            -->
+        </div>
+    </div>
+
+    <!-- Estrutura do Modal (inicialmente oculta) -->
+    <div id="modal-backdrop" class="modal-backdrop hidden">
+        <div id="modal-content" class="modal-content">
+            
+            <!-- Cabeçalho do Modal -->
+            <div class="modal-header">
+                <h2 id="modal-title" class="modal-title"></h2>
+                <span id="modal-close-btn" class="modal-close">&times;</span>
+            </div>
+
+            <!-- Conteúdo do Modal (com scroll) -->
+            <div id="modal-content-scroll" class="modal-body">
+                <!-- O conteúdo do módulo será inserido aqui -->
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // --- BASE DE DADOS DOS MÓLOS ---
+        // Aqui você pode editar e adicionar seus módulos.
+        // O conteúdo (content) pode ser HTML.
+        const modulesData = [
+            {
+                title: "O que é Inclusão e o Braille?",
+                borderColor: "#3b82f6", // Azul
+                imageColor: "#4c1d95", // Roxo escuro
+                content: `
+                    <p>A inclusão é um conceito que se refere à prática de garantir que todas as pessoas, independentemente de suas habilidades, deficiências, raça, gênero, orientação sexual ou qualquer outra característica, tenham a oportunidade de participar plenamente da sociedade.</p>
+                    <p>Trata-se de criar ambientes - sejam eles escolas, locais de trabalho ou comunidades - que sejam acolhedores, acessíveis e justos para todos. A inclusão vai além da simples integração; ela busca valorizar a diversidade e garantir que cada indivíduo se sinta parte integrante do grupo.</p>
+                    
+                    <img src="https://placehold.co/800x400/600x400/9333ea/ffffff?text=Exemplo+de+Imagem" alt="Imagem ilustrativa">
+
+                    <h3>E o Braille?</h3>
+                    <p>O Braille é um sistema de escrita tátil utilizado por pessoas cegas ou com baixa visão. Criado no século XIX por Louis Braille, o sistema consiste em combinações de pontos em relevo, organizados em células de seis pontos (duas colunas de três pontos).</p>
+                    <p>Cada célula Braille pode representar uma letra, um número, um sinal de pontuação ou até mesmo símbolos musicais e matemáticos. Este sistema é fundamental para a alfabetização, educação e autonomia das pessoas com deficiência visual, permitindo-lhes ler e escrever de forma independente.</p>
+                `
+            },
+            {
+                title: "Libras e Cultura Surda",
+                borderColor: "#22c55e", // Verde
+                imageColor: "#4c1d95", // Roxo escuro
+                content: `
+                    <p>A Língua Brasileira de Sinais (Libras) é a língua oficial da comunidade surda brasileira. Reconhecida por lei, não é apenas um conjunto de gestos, mas sim uma língua completa, com estrutura gramatical, sintaxe e semântica próprias.</p>
+                    
+                    <h3>O que é a Cultura Surda?</h3>
+                    <p>A Cultura Surda refere-se ao conjunto de valores, tradições, costumes, produções artísticas e experiências compartilhadas por pessoas surdas. Ela se baseia na identidade surda e no uso de uma língua de sinais como principal forma de comunicação.</p>
+                    <p>É importante entender que a surdez não é vista como uma deficiência dentro desta cultura, mas sim como uma característica identitária que une uma comunidade com uma língua e uma visão de mundo singulares.</p>
+                `
+            },
+            {
+                title: "Acessibilidade Digital",
+                borderColor: "#ef4444", // Vermelho
+                imageColor: "#4c1d95", // Roxo escuro
+                content: `
+                    <p>Acessibilidade digital é a prática de criar sites, aplicativos e tecnologias digitais que possam ser utilizados por todas as pessoas, incluindo aquelas com deficiências visuais, auditivas, motoras ou cognitivas.</p>
+                    <p>Isso envolve seguir diretrizes e padrões, como o WCAG (Web Content Accessibility Guidelines), para garantir que o conteúdo seja perceptível, operável, compreensível e robusto.</p>
+                    
+                    <img src="https://placehold.co/800x300/f87171/ffffff?text=Web+Para+Todos" alt="Web para todos">
+                    
+                    <h3>Por que é Importante?</h3>
+                    <ul>
+                        <li>Garante o direito de acesso à informação.</li>
+                        <li>Expande o público-alvo de produtos e serviços.</li>
+                        <li>Melhora a usabilidade geral para todos os usuários.</li>
+                        <li>É um requisito legal em muitos países.</li>
+                    </ul>
+                `
+            },
+            {
+                title: "Design Universal",
+                borderColor: "#eab308", // Amarelo
+                imageColor: "#4c1d95", // Roxo escuro
+                content: `
+                    <p>O Design Universal é o design de produtos e ambientes para que possam ser usados pelo maior número de pessoas possível, sem a necessidade de adaptação ou design especializado.</p>
+                    <p>Diferente da acessibilidade (que foca em adaptar para deficiências), o Design Universal busca criar uma solução única que atenda a todos desde o início.</p>
+                    <h3>Os 7 Princípios do Design Universal:</h3>
+                    <ol>
+                        <li><strong>Uso Equitativo:</strong> Útil para pessoas com diversas habilidades.</li>
+                        <li><strong>Flexibilidade no Uso:</strong> Acomoda uma ampla gama de preferências e habilidades.</li>
+                        <li><strong>Uso Simples e Intuitivo:</strong> Fácil de entender, independentemente da experiência.</li>
+                        <li><strong>Informação Perceptível:</strong> Comunica a informação necessária eficazmente.</li>
+                        <li><strong>Tolerância ao Erro:</strong> Minimiza os perigos e consequências de ações acidentais.</li>
+                        <li><strong>Baixo Esforço Físico:</strong> Pode ser usado de forma eficiente e confortável.</li>
+                        <li><strong>Tamanho e Espaço para Abordagem e Uso:</strong> Apropriado para alcance, manipulação e uso.</li>
+                    </ol>
+                `
+            }
+        ];
+
+        // --- LÓGICA DA PÁGINA ---
+
+        // Aguarda o DOM estar pronto
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Seleciona os elementos principais
+            const cardContainer = document.getElementById('card-container');
+            const modalBackdrop = document.getElementById('modal-backdrop');
+            const modalContent = document.getElementById('modal-content');
+            const modalTitle = document.getElementById('modal-title');
+            const modalContentScroll = document.getElementById('modal-content-scroll');
+            const modalCloseBtn = document.getElementById('modal-close-btn');
+
+            // Função para criar o texto de prévia (removendo tags HTML)
+            function createPreview(htmlContent) {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = htmlContent;
+                return tempDiv.textContent || tempDiv.innerText || "";
+            }
+
+            // Função para renderizar os cards na página
+            function renderCards() {
+                cardContainer.innerHTML = ''; // Limpa o container
+                
+                modulesData.forEach((module, index) => {
+                    const previewText = createPreview(module.content);
+                    
+                    // Cria o elemento do card
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.style.borderColor = module.borderColor;
+                    
+                    // Adiciona o conteúdo HTML ao card
+                    card.innerHTML = `
+                        <div class="card-image-placeholder" style="background-color: ${module.imageColor};"></div>
+                        <h3 class="card-title">${module.title}</h3>
+                        <p class="card-preview-text">${previewText}</p>
+                        <span class="card-link">Clique para ver mais</span>
+                    `;
+                    
+                    // Adiciona o evento de clique para abrir o modal
+                    card.addEventListener('click', () => openModal(index));
+                    
+                    // Adiciona o card ao container
+                    cardContainer.appendChild(card);
+                });
+            }
+
+            // Função para abrir o modal
+            function openModal(index) {
+                const module = modulesData[index];
+                
+                modalTitle.textContent = module.title;
+                modalContentScroll.innerHTML = module.content;
+                
+                modalBackdrop.classList.remove('hidden');
+                document.body.style.overflow = 'hidden'; // Trava o scroll da página
+            }
+
+            // Função para fechar o modal
+            function closeModal() {
+                modalBackdrop.classList.add('hidden');
+                document.body.style.overflow = 'auto'; // Libera o scroll da página
+            }
+
+            // --- Adiciona os Eventos ---
+
+            // Renderiza os cards iniciais
+            renderCards();
+
+            // Evento para fechar no botão 'X'
+            modalCloseBtn.addEventListener('click', closeModal);
+
+            // Evento para fechar clicando fora (no backdrop)
+            modalBackdrop.addEventListener('click', closeModal);
+
+            // Impede que o modal feche ao clicar DENTRO dele
+            modalContent.addEventListener('click', (event) => {
+                event.stopPropagation();
+            });
+
+        });
+    </script>
+
+</body>
+</html>
