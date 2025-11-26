@@ -24,9 +24,9 @@ html{
     z-index: 50;
     background: #e4e4e4;
 }
-.section p{
+.container p{
     text-align: justify; 
-    /* width: 80%; */
+    width: 80%;
     margin: 0 auto;
 }
 .section .features p{
