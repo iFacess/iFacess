@@ -24,6 +24,7 @@
     align-items: center;
     padding: 0.3rem;
     margin-bottom: 1.3rem;
+    padding: 0.5rem;
 }
 
 .card_profile img {
@@ -56,13 +57,12 @@
     margin: 0 0 0.2rem 0;
 }
 
-.card_description p{
-    margin: 0;
+.section .cards .card_description{
     font-family: "Rubik", sans-serif;
-    font-size: 0.9rem;
+    font-size: 1rem;
     color: #333;
     width: 100%;
-    border: solid red 1px;
+    /* border: solid red 1px; */
 }
 
 .social_icons{
