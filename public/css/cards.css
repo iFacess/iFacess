@@ -13,76 +13,91 @@
 
 /* ... (Mantenha as outras classes de fontes, se houver) ... */
 
-.cards{
-    /* Estilo do Card: Fundo Azul e Borda Arredondada */
-    background: linear-gradient(90deg, #3a6bff 0%, #a2c0ff 100%);
-    width: 65%;
-    min-height: 12rem; /* Mantido para flexibilidade */
-    margin: 0 auto 2rem;
+.cards {
+    background-color: #ffffff;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 70%;
+    min-height: 15rem;
+    margin: 0 auto;
     border-radius: 20px;
     display: flex;
     align-items: center;
-    padding: 1.2rem;
-    gap: 1.5rem;
-    box-sizing: border-box;
+    padding: 0.3rem;
+
 }
 
-.card_profile{
-    /* Estilo da Foto: Círculo Cinza */
-    width: 8rem;
-    height: 8rem;
+.card_profile img {
+    width: 12rem;
+    height: 12rem;
     background-color: #d9d9d9;
     border-radius: 50%;
-    flex-shrink: 0; 
+    /* flex-shrink: 0; */
+    margin: 0.8rem;
 }
 
 /* NOVO: Container para Nome, Descrição e Ícones */
 .card_content {
+    /* border: solid red 1px; */
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Centraliza o conteúdo verticalmente */
-    flex-grow: 1; 
+    justify-content: center;
+    height: 100%;
+    margin: 1rem;
 }
 
-.name_profile{
+.name_profile {
+    margin-top: 1rem;
+    width: 100%;
+    height: 20%;
     font-family: "Alice", serif;
     font-weight: 400;
     font-size: 1.5rem;
     color: #333;
-    margin: 0 0 0.2rem 0; /* Ajuste a margem inferior para aproximar da descrição */
-    line-height: 1.2; /* Garante que o nome não ocupe espaço desnecessário */
+    margin: 0 0 0.2rem 0;
 }
 
-.card_description {
+.card_description p{
+    margin: 0;
     font-family: "Rubik", sans-serif;
     font-size: 0.9rem;
     color: #333;
-    margin: 0.2rem 0 0.5rem 0; /* Margem ajustada para alinhar melhor */
-
-    /* Correção e Limite de Texto (Elipse) */
-    overflow-wrap: break-word;
-    word-wrap: break-word; 
-    overflow: hidden; 
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 2; 
-    -webkit-box-orient: vertical;
+    width: 100%;
+    border: solid red 1px;
 }
 
 .social_icons{
+    width: 100%;
     display: flex;
-    gap: 0.75rem; 
-    margin-top: 0.5rem;
+    /* margin-top: 0.5rem; */
 }
 
-/* Estilo dos Ícones SVG */
-.social_icons svg {
-    width: 1.8rem;
-    height: 1.8rem;
-    fill: #333;
-    transition: fill 0.2s ease;
+.social_icons a{
+    text-decoration: none;
+    color: rgb(38, 38, 38);
+    font-size: 35px;
+    margin:0.5rem;
+    transition: 0.4s;
+}
+.social_icons a:hover{
+    transition: 0.4s;
+    color: #45568E;
+    transform:scale(1.05);
 }
 
-.social_icons a:hover svg {
-    fill: #3a6bff;
+@media (max-width: 768px) {
+    .cards{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .card_profile img{
+        margin: 0.3rem;
+        margin-top: 0.4rem;
+    }
+    .card_content{
+        width: 100%;
+    }
+    .social_icons{
+        justify-content: center;
+    }
 }
