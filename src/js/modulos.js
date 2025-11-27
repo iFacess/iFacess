@@ -2,8 +2,8 @@
 const modulesData = [
     {
         title: "O que é Inclusão e o Braille?",
-        borderColor: "#3b82f6", // Azul
-        imageColor: "#4c1d95", // Roxo escuro
+        borderColor: "#3b82f6", 
+        iconPath: "/src/img/ifbraille/icons/braille.png", 
         content: `
             <p>A inclusão é um princípio fundamental que garante que todas as pessoas tenham acesso igualitário à educação, à tecnologia, ao trabalho e à participação social. Ela reconhece a diversidade humana e busca eliminar barreiras — sejam físicas, comunicacionais ou digitais — para que todos possam exercer seus direitos de forma plena.</p>
             <p>No ambiente escolar, a inclusão se torna ainda mais importante por promover espaços acolhedores para estudantes com diferentes necessidades. Isso fortalece a aprendizagem, reduz desigualdades e estimula valores como empatia, respeito e colaboração.</p>
@@ -63,7 +63,8 @@ const modulesData = [
     {
         title: "Acessibilidade Digital",
         borderColor: "#ef4444", // Vermelho
-        imageColor: "#4c1d95", // Roxo escuro
+        // Substituído imageColor por iconPath
+        iconPath: "/src/img/ifbraille/icons/digital.png", 
         content: `
             <p>A acessibilidade digital é o conjunto de práticas, tecnologias e padrões que tornam ambientes digitais utilizáveis por todas as pessoas, incluindo usuários com deficiência visual. Dentro desse cenário, o Braille continua sendo essencial, pois conecta o mundo físico ao digital e garante autonomia em diversos contextos de aprendizagem, comunicação e navegação.</p>
             <p>No ambiente digital, o Braille não aparece apenas no papel. Hoje, existem diversos sistemas, dispositivos e softwares que interpretam, geram e traduzem textos para Braille de maneira automática, permitindo que pessoas cegas utilizem computadores, celulares e tablets de forma independente.</p>
@@ -109,8 +110,9 @@ const modulesData = [
     },
     {
         title: "Braille no Esporte",
-        borderColor: "#74c55eff", // Vermelho
-        imageColor: "#4c1d95", // Roxo escuro
+        borderColor: "#74c55eff", // Verde
+        // Substituído imageColor por iconPath
+        iconPath: "/src/img/ifbraille/icons/trophy.png",
         content: `
             <p>O Braille também desempenha um papel importante no esporte, garantindo que pessoas com deficiência visual tenham acesso às regras, instruções, materiais e estratégias necessárias para participar de maneira autônoma e inclusiva. Embora o esporte adaptado utilize muitos recursos sonoros e táteis, o Braille continua sendo uma ferramenta essencial para comunicação, organização e aprendizado técnico.</p>
             <p>No ambiente esportivo, o Braille permite a leitura de tabelas, anotações, marcações de treino, estatísticas e orientações de segurança, oferecendo independência e fortalecendo o protagonismo dos atletas.</p>
@@ -156,7 +158,8 @@ const modulesData = [
     {
         title: "Design Universal",
         borderColor: "#eab308", // Amarelo
-        imageColor: "#4c1d95", // Roxo escuro
+        // Substituído imageColor por iconPath
+        iconPath: "/src/img/ifbraille/icons/universal.png", 
         content: `
             <p>O Design Universal aplicado ao Braille busca criar ambientes, produtos e serviços que possam ser utilizados por todas as pessoas, independentemente de suas limitações visuais. A ideia central do Design Universal é garantir que a acessibilidade não seja um complemento, mas sim uma parte fundamental do projeto — e o Braille se torna uma ferramenta essencial dentro dessa abordagem.</p>
             <p>Quando integrado desde o início, o Braille promove inclusão, autonomia e segurança em ambientes públicos e privados, permitindo que pessoas cegas ou com baixa visão acessem informações importantes de maneira independente.</p>
@@ -204,7 +207,8 @@ const modulesData = [
     {
         title: "Impressora Braille",
         borderColor: "#45568E", // Cor do Site
-        imageColor: "#4c1d95", // Roxo escuro
+        // Substituído imageColor por iconPath
+        iconPath: "/src/img/ifbraille/icons/printer.png",
         content: `
             <p>A Basic-D é uma impressora braille de mesa projetada para oferecer impressão em braille de alta qualidade de forma acessível e fácil de usar. Desenvolvida com a mais recente tecnologia, ela permite que indivíduos, educadores e organizações produzam materiais em braille com rapidez e precisão. Sua construção robusta e design intuitivo a tornam ideal para uso tanto em ambientes domésticos quanto institucionais.</p>
             <h3>Sobre a Inclusão</h3>
@@ -347,13 +351,13 @@ document.addEventListener('DOMContentLoaded', () => {
             card.className = 'module-card'; // Classe atualizada
             card.style.borderColor = module.borderColor;
 
-            // HTML Interno atualizado com as novas classes
+            // HTML Interno ATUALIZADO: Usando <img> com iconPath no lugar do div colorido
             card.innerHTML = `
-                <div class="module-card-image-placeholder" style="background-color: ${module.imageColor};"></div>
-                <h3 class="module-card-title">${module.title}</h3>
-                <p class="module-card-preview-text">${previewText}</p>
-                <span class="module-card-link">Clique para ver mais</span>
-            `;
+            <img src="${module.iconPath}" alt="Ícone do módulo ${module.title}" class="module-card-icon">
+            <h3 class="module-card-title">${module.title}</h3>
+            <p class="module-card-preview-text">${previewText}</p>
+            <span class="module-card-link">Clique para ver mais</span>
+        `;
 
             card.addEventListener('click', () => openModal(index));
             cardContainer.appendChild(card);
