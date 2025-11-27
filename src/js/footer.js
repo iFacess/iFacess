@@ -9,7 +9,7 @@ function loadFooter() {
                     <a href="/#anchor_projects">Projetos</a>
                     <a href="/forum">Fórum</a>
                 </div>
-                <p>&copy;2025 iFacess - Todos os direitos reservados</p>
+                <p style="text-align: justify; text-align: center;">&copy;2025 iFacess - Todos os direitos reservados</p>
             </div>
         </footer>
     `;

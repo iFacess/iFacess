@@ -172,7 +172,8 @@ const modulesData = [
                 
             <h3>Como o Design Universal do Braille Atua</h3>
             <p>A presença do Braille em diferentes contextos garante que as informações estejam disponíveis em múltiplos formatos, fortalecendo a inclusão. Ele pode estar em superfícies táteis, placas, equipamentos e sinalizações, sempre com o objetivo de orientar, informar e guiar o usuário.</p>
-                
+            <img src="../../../src/img/ifbraille/pavimentoBraille.webp">
+            <p style="text-align: center;">Foto em acesso pelo site "enablingvillage.sg" - <a href="https://enablingvillage.sg/universal-design/" target="_blank">Acesse aqui!</a></p>
             <ol>
                 <li><b>Sinalização tátil:</b> placas com Braille e alto-relevo em portas, elevadores, banheiros e corredores.</li>
                 <li><b>Piso tátil:</b> utilizado para guiar, alertar ou organizar fluxos de deslocamento em áreas públicas.</li>
@@ -244,6 +245,8 @@ const modulesData = [
             <div class="linha"></div>
             <h1>Como Utilizar a Impressora Braille Basic-D V4 – Guia Prático</h1>
             <p>A <b>Basic-D V4</b> é uma impressora Braille de mesa, compacta e bastante usada em escolas, bibliotecas e centros de acessibilidade. Ela é conhecida por ser confiável e produzir Braille de alta qualidade em papel comum (formulário contínuo).</p>
+            <img src="../../../src/img/ifbraille/impressoraBasicDv4.webp">
+            <p style="text-align: center;">Foto em acesso pelo site "indexbraille.com" - <a href="https://www.indexbraille.com/en-us/braille-embossers/discontinued/basic-d-v4" target="_blank">Acesse aqui!</a></p>
             <h3>1. Antes de começar: o que você vai precisar</h3>
             <ol>
                 <li>A impressora Braille Basic-D V4;</li>
