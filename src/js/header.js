@@ -7,7 +7,7 @@ function loadHeader() {
     let linksHTML = `
       <li><a href="/">Inicio</a></li>
       <li><a href="/sobre">Sobre</a></li>
-      <li><a href="#anchor_projects">Projetos</a></li>
+      <li><a href="/#anchor_projects">Projetos</a></li>
       <li><a href="/forum">Fórum</a></li>
     `;  
   
@@ -30,7 +30,7 @@ function loadHeader() {
         <li><a href="/">Inicio</a></li>
         <li><a href="/sobre">Sobre</a></li>
         <li><a href="/">Regras</a></li>
-        <li><a href="/">Projetos</a></li>
+        <li><a href="/#anchor_projects">Projetos</a></li>
       `;
     }
   
